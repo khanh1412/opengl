@@ -1,4 +1,5 @@
-#include"renderer.h"
+#include"Renderer.h"
+#include<iostream>
 void CLClearError()
 {
 	while(glGetError() != GL_NO_ERROR);_
