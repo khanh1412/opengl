@@ -120,7 +120,7 @@ int main(void)
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+		"	color = vec4(0.0f, 0.5f, 0.0f, 1.0f);\n"
 		"}\n";
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
