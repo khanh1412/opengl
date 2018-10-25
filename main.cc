@@ -102,7 +102,7 @@ int main(void)
 
 
 		/* render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		renderer.Clear();
 
 		shader.Bind();
 		shader.SetUniform4f("u_Color", r, g, b, 1.0f);
@@ -110,9 +110,8 @@ int main(void)
 		va.Bind();
 		ib.Bind();
 
-//		renderer.Draw(va, ib, shader);
+		renderer.Draw(va, ib, shader);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 
 		glfwSwapBuffers(window);
