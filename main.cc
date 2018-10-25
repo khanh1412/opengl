@@ -111,9 +111,6 @@ int main(void)
 
 	va.AddBuffer(vb, layout);
 
-
-
-
 	IndexBuffer ib(indices, 6);
 
 
