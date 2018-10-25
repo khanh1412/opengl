@@ -34,7 +34,10 @@ class VertexBufferLayout
 		{
 	//		static_assert(false);
 		}
-		
+		void Push_float(unsigned int count);
+		void Push_unsigned_int(unsigned int count);
+		void Push_unsigned_char(unsigned int count);
+
 
 		inline const std::vector<VertexBufferElement> GetElements() const {return m_Elements;}
 		inline unsigned int GetStride() const {return m_Stride;}
