@@ -50,29 +50,17 @@ static int CreateShader(const std::string& vertexShader, const std::string& frag
 	return program;
 }
 
-int main(void)
+struct buffer_shader
 {
-	//intialize the library
-	
-	if (!glfwInit())
-		return -1;
+	unsigned int buffer;
+	unsigned int ino;
+	unsigned int shader;
+};
 
-	GLFWwindow *window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
-
-	if (!window)
-	{
-		glfwTerminate();
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-	if (glewInit() != GLEW_OK)
-		std::cout<< "Error!"<<std::endl;
-
-	std::cout<<glGetString(GL_VERSION)<<std::endl;
+struct buffer_shader create_buffer_shader()
+{
 
 	//prepare buffer
-
 	float positions[12] = 
 	{
 		-0.5f, -0.5f,//0
@@ -125,16 +113,42 @@ int main(void)
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
 
-
+	return {buffer, ibo, shader};
 
 	//end prepare buffer
+}
+
+
+
+
+
+int main(void)
+{
+	//intialize the library
+	
+	if (!glfwInit())
+		return -1;
+
+	GLFWwindow *window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
+
+	if (!window)
+	{
+		glfwTerminate();
+		return -1;
+	}
+
+	glfwMakeContextCurrent(window);
+	if (glewInit() != GLEW_OK)
+		std::cout<< "Error!"<<std::endl;
+
+	std::cout<<glGetString(GL_VERSION)<<std::endl;
+
 
 	while (!glfwWindowShouldClose(window))
 	{
+	struct buffer_shader x = create_buffer_shader();
 		//render
 		glClear(GL_COLOR_BUFFER_BIT);
-
-
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 
@@ -142,9 +156,10 @@ int main(void)
 		//end render
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+	glDeleteProgram(x.shader);
+	glDeleteBuffers(1, &(x.buffer));
 	}
 
-	glDeleteProgram(shader);
 
 	glfwTerminate();
 	return 0;
