@@ -131,9 +131,9 @@ int main(void)
 
 	while (!glfwWindowShouldClose(window))
 	{
+		//render
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//render
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
