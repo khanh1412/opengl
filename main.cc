@@ -99,19 +99,14 @@ int main(void)
 	glBindVertexArray(vao);
 
 
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 8*sizeof(float), &(positions[0]), GL_STATIC_DRAW);
+	VertexBuffer vb(positions, 4*2*sizeof(float));
+
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
 
+	IndexBuffer ib(indices, 6);
 
-	unsigned int ibo;
-	glGenBuffers(1, &ibo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(unsigned int), &(indices[0]), GL_STATIC_DRAW);
 
 	std::string vertexShader = 
 		"#version 330 core\n"
@@ -145,6 +140,8 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+		glBindVertexArray(vao);
+		ib.Bind();
 
 
 		//end render
@@ -152,8 +149,6 @@ int main(void)
 		glfwPollEvents();
 	}
 	glDeleteProgram(shader);
-	glDeleteBuffers(1, &(buffer));
-	glDeleteBuffers(1, &(ibo));
 
 
 	glfwTerminate();
