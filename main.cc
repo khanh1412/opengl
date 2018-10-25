@@ -1,5 +1,6 @@
-#include<GL/glew.h>
+//#include<GL/glew.h>
 #include<GLFW/glfw3.h>
+#include<GL/glew.h>
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -10,7 +11,6 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
 	const char *src = source.c_str();
 	glShaderSource(id, 1, &src, nullptr);
 	glCompileShader(id);
-	//todo: error handling
 	
 	int result;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
