@@ -56,16 +56,16 @@ struct buffer_shader
 	unsigned int shader;
 };
 
-struct buffer_shader create_buffer_shader(float x = 0.5)
+struct buffer_shader create_buffer_shader()
 {
 
 	//prepare buffer
 	float positions[12] = 
 	{
-		-x, -x,//0
-		 x, -x,//1
-		 x,  x,//2
-		-x,  x //3
+		-0.5f, -0.5f,//0
+		 0.5f, -0.5f,//1
+		 0.5f,  0.5f,//2
+		-0.5f,  0.5f //3
 	};
 
 	unsigned int indices[] =
@@ -137,20 +137,15 @@ int main(void)
 	}
 
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
 	if (glewInit() != GLEW_OK)
 		std::cout<< "Error!"<<std::endl;
 
 	std::cout<<glGetString(GL_VERSION)<<std::endl;
 
 
-	float x = 0;
 	while (!glfwWindowShouldClose(window))
 	{
-		if (x>1.0)
-			x = 0;
-		x += 0.01;
-	struct buffer_shader bs = create_buffer_shader(x);
+	struct buffer_shader x = create_buffer_shader();
 		//render
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -160,8 +155,8 @@ int main(void)
 		//end render
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-	glDeleteProgram(bs.shader);
-	glDeleteBuffers(1, &(bs.buffer));
+	glDeleteProgram(x.shader);
+	glDeleteBuffers(1, &(x.buffer));
 	}
 
 
