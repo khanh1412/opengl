@@ -52,7 +52,7 @@ static int CreateShader(const std::string& vertexShader, const std::string& frag
 struct buffer_shader
 {
 	unsigned int buffer;
-	unsigned int ino;
+	unsigned int ibo;
 	unsigned int shader;
 };
 
@@ -162,6 +162,7 @@ int main(void)
 		glfwPollEvents();
 	glDeleteProgram(bs.shader);
 	glDeleteBuffers(1, &(bs.buffer));
+	glDeleteBuffers(1, &(bs.ibo));
 	}
 
 
