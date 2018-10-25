@@ -99,13 +99,13 @@ int main(void)
 	glBindVertexArray(vao);
 
 
-	VertexBuffer vb(positions, 4*2*sizeof(float));
+	VertexBuffer *vb = new VertexBuffer(positions, 4*2*sizeof(float));
 
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
 
-	IndexBuffer ib(indices, 6);
+	IndexBuffer *ib = new IndexBuffer(indices, 6);
 
 
 	std::string vertexShader = 
@@ -146,7 +146,8 @@ int main(void)
 		glfwPollEvents();
 	}
 	glDeleteProgram(shader);
-
+	delete vb;
+	delete ib;
 
 	glfwTerminate();
 	return 0;
