@@ -22,7 +22,7 @@ int main(void)
 
 	std::cout<<glGetString(GL_VERSION)<<std::endl;
 
-
+/*
 	float position[6] =
 	{
 		-0.5f, -0.5f,
@@ -35,7 +35,7 @@ int main(void)
 	glGenBufffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), position, GL_STATIC_DRAW);
-
+*/
 
 
 
