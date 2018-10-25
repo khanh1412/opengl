@@ -126,7 +126,7 @@ int main(void)
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	color = vec4(0.0f, 0.5f, 0.0f, 1.0f);\n"
+		"	color = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
 		"}\n";
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
@@ -138,11 +138,8 @@ int main(void)
 	{
 		//render
 		glClear(GL_COLOR_BUFFER_BIT);
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-		glBindVertexArray(vao);
-		ib.Bind();
-
 
 		//end render
 		glfwSwapBuffers(window);
