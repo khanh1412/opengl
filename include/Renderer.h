@@ -8,8 +8,6 @@
 #include"Shader.h"
 
 #define ASSERT(x) if (!(x)) __builtin_trap()
-
-
 class Renderer
 {
 	public:

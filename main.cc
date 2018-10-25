@@ -8,7 +8,7 @@
 #include"IndexBuffer.h"
 #include"VertexArray.h"
 #include"Shader.h"
-
+#include"VertexBufferLayout.h"
 
 
 #include<cmath>
@@ -79,23 +79,26 @@ int main(void)
 	shader.Unbind();
 
 
+	Renderer renderer;
 	
-
+	
 
 	float r = 1.0f;
 	float g = 0.0f;
 	float b = 0.0f;
 	float alpha = 0.0f;
 
+	
 	while (!glfwWindowShouldClose(window))
 	{
+		
 		alpha += 0.05f;
 
 		r = std::cos(alpha);
 		g = std::cos(2.0944 - alpha);
 		b = std::cos(4.1888 - alpha);
 
-
+		
 
 
 		/* render here */
@@ -107,6 +110,7 @@ int main(void)
 		va.Bind();
 		ib.Bind();
 
+//		renderer.Draw(va, ib, shader);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
