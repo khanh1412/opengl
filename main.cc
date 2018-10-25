@@ -7,6 +7,7 @@
 #include"Renderer.h"
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
+#include"ParseShader.h"
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
@@ -108,26 +109,11 @@ int main(void)
 	IndexBuffer *ib = new IndexBuffer(indices, 6);
 
 
-	std::string vertexShader = 
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) in vec4 position;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = position;\n"
-		"}\n";
+	std::string vertexShader;
+	std::string fragmentShader;
 
+	ParseShader("./resources/shader/basic.shader", vertexShader, fragmentShader);
 
-	std::string fragmentShader = 
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) out vec4 color;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	color = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
-		"}\n";
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
 
