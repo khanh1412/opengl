@@ -4,10 +4,11 @@
 #include<fstream>
 #include<string>
 
+#include"ParseShader.h"
+
 #include"Renderer.h"
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
-#include"ParseShader.h"
 #include"VertexArray.h"
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
@@ -97,10 +98,11 @@ int main(void)
 		2, 3, 0
 	};
 
+	/*
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-
+	*/
 
 	VertexArray va;
 	VertexBuffer vb(positions, 4*2*sizeof(float));
