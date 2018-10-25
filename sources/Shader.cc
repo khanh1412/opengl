@@ -1,20 +1,39 @@
 #include"Shader.h"
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<sstream>
+
+#include"Renderer.h"
+
 Shader::Shader(const std::string& filename)
 	: m_FilePath(filename), m_RendererID(0)
 {
-	CompileShader();
+	ParseShader();
+	m_RendererID = CreateShader();
 }
-~Shader();
-
-void Shader::Bind() const;
-void Shader::UnBind() const;
-
-void Shader::SetUniform4f(const std::string& name, float f0, float f1, float f2, float f3);
-unsigned int Shader::GetUniformLocation(const std::string& name);
-
-void ParseShader(const std::string& filepath, std::string& VertexShader, std::string& FragmentShader)
+Shader::~Shader()
 {
-	std::ifstream stream(filepath);
+	glDeleteProgram(m_RendererID);
+}
+
+
+void Shader::Bind() const
+{
+	glUseProgram(m_RendererID);
+}
+void Shader::Unbind() const
+{
+	glUseProgram(0);
+}
+
+void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+{
+	glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
+}
+void Shader::ParseShader()
+{
+	std::ifstream stream(m_FilePath);
 
 	enum class ShaderType
 	{
@@ -39,13 +58,36 @@ void ParseShader(const std::string& filepath, std::string& VertexShader, std::st
 		}
 	}
 
-	VertexShader = s[0].str();
-	FragmentShader = s[1].str();
+	m_VertexShader = s[0].str();
+	m_FragmentShader = s[1].str();
 }
-static unsigned int CompileShader(unsigned int type, const std::string& source)
+unsigned int Shader::CreateShader()
+{
+	unsigned int program =  glCreateProgram();
+	unsigned int vs = CompileShader(GL_VERTEX_SHADER);
+	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER);
+
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
+}
+unsigned int Shader::CompileShader(unsigned int type)
 {
 	unsigned int id = glCreateShader(type);
-	const char *src = source.c_str();
+	const char *src;
+	if (GL_VERTEX_SHADER == type)
+		src = m_VertexShader.c_str();
+	else if (GL_FRAGMENT_SHADER == type)
+		src = m_FragmentShader.c_str();
+
 	glShaderSource(id, 1, &src, nullptr);
 	glCompileShader(id);
 	
@@ -67,30 +109,9 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
 	}
 	return id;
 }
-
-static int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+unsigned int Shader::GetUniformLocation(const std::string& name)
 {
-	unsigned int program =  glCreateProgram();
-	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	
-	glLinkProgram(program);
-	glValidateProgram(program);
-
-
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
+	unsigned int location = glGetUniformLocation(m_RendererID, name.c_str());
+	return location;
 }
 
-
-
-
-
-
-
-bool Shader::CompileShader()

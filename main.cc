@@ -4,13 +4,12 @@
 #include<fstream>
 #include<string>
 
-#include"ParseShader.h"
 
 #include"Renderer.h"
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
 #include"VertexArray.h"
-
+#include"Shader.h"
 
 
 
@@ -40,7 +39,8 @@ int main(void)
 	std::cout<<glGetString(GL_VERSION)<<std::endl;
 
 	{
-	//prepare buffer
+
+
 	float positions[12] = 
 	{
 		-0.5f, -0.5f,//0
@@ -55,11 +55,6 @@ int main(void)
 		2, 3, 0
 	};
 
-	/*
-	unsigned int vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	*/
 
 	VertexArray va;
 	VertexBuffer vb(positions, 4*2*sizeof(float));
@@ -71,29 +66,55 @@ int main(void)
 	IndexBuffer ib(indices, 6);
 
 
-	std::string vertexShader;
-	std::string fragmentShader;
+	Shader shader("./resources/shaders/basic.shader");
+	shader.Bind();
 
-	ParseShader("./resources/shader/basic.shader", vertexShader, fragmentShader);
-
-	unsigned int shader = CreateShader(vertexShader, fragmentShader);
-	glUseProgram(shader);
+	shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 
-	//end prepare buffer
+	va.Unbind();
+	vb.Unbind();
+	ib.Unbind();
+	shader.Unbind();
+
+
+	
+
+
+	float r = 0.0f;
+	float inc = 0.05f;
 
 	while (!glfwWindowShouldClose(window))
 	{
-		//render
+		/* render here */
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		shader.Bind();
+		shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+	
+		va.Bind();
+		ib.Bind();
+
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		//end render
+
+		if (r>1.0f)
+			inc = -0.05f;
+		else if (r<0.0f)
+			inc = 0.05f;
+		r += inc;
+
+
+
+
+
+
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	glDeleteProgram(shader);
+	
 	}
 
 	glfwTerminate();

@@ -11,7 +11,7 @@ class VertexBuffer
 		~VertexBuffer();
 
 		void Bind() const;
-		void UnBind() const;
+		void Unbind() const;
 };
 
 #endif

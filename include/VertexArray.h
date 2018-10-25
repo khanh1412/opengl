@@ -13,6 +13,6 @@ class VertexArray
 
 		void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 		void Bind() const;
-		void UnBind() const;
+		void Unbind() const;
 };
 #endif
