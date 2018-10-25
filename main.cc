@@ -8,6 +8,7 @@
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
 #include"ParseShader.h"
+#include"VertexArray.h"
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
@@ -80,6 +81,7 @@ int main(void)
 
 	std::cout<<glGetString(GL_VERSION)<<std::endl;
 
+	{
 	//prepare buffer
 	float positions[12] = 
 	{
@@ -100,13 +102,16 @@ int main(void)
 	glBindVertexArray(vao);
 
 
-	VertexBuffer *vb = new VertexBuffer(positions, 4*2*sizeof(float));
+	VertexArray va;
+	VertexBuffer vb(positions, 4*2*sizeof(float));
+	VertexBufferLayout layout;
+	layout.push<float>(2);
+	va.AddBuffer(vb, layout);
 
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
 
-	IndexBuffer *ib = new IndexBuffer(indices, 6);
+
+	IndexBuffer ib(indices, 6);
 
 
 	std::string vertexShader;
@@ -132,8 +137,7 @@ int main(void)
 		glfwPollEvents();
 	}
 	glDeleteProgram(shader);
-	delete vb;
-	delete ib;
+	}
 
 	glfwTerminate();
 	return 0;
