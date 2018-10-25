@@ -1,6 +1,7 @@
 #ifndef _SHADER_H_
 #define _SHADER_H_
 #include<string>
+#include<unordered_map>
 class Shader
 {
 	private:
@@ -8,6 +9,7 @@ class Shader
 		unsigned int m_RendererID;
 		std::string m_VertexShader;
 		std::string m_FragmentShader;
+		std::unordered_map<std::string, int> m_UniformLocationCache;
 	public:
 		Shader(const std::string& filename);
 		~Shader();
@@ -21,7 +23,7 @@ class Shader
 		void ParseShader();
 		unsigned int CreateShader();
 		unsigned int CompileShader(unsigned int type);
-		unsigned int GetUniformLocation(const std::string& name);
+		int GetUniformLocation(const std::string& name);
 };
 
 #endif
