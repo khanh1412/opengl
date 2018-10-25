@@ -18,16 +18,6 @@ class VertexBufferLayout
 	public:
 		VertexBufferLayout()
 			: m_Stride(0) {}
-		/*
-		template<typename T>
-		void Push(unsigned int count);
-		template<>
-		void Push<float>(unsigned int count);
-		template<>
-		void Push<unsigned int>(unsigned int count);
-		template<>
-		void Push<unsigned char>(unsigned int count);
-		*/
 
 		void Push_float(unsigned int count);
 		void Push_unsigned_int(unsigned int count);
