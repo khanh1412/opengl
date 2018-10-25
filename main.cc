@@ -1,8 +1,6 @@
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 #include<iostream>
-#include<fstream>
-#include<string>
 
 
 #include"Renderer.h"
@@ -13,7 +11,7 @@
 
 
 
-
+#include<cmath>
 
 
 
@@ -84,34 +82,33 @@ int main(void)
 	
 
 
-	float r = 0.0f;
-	float inc = 0.05f;
+	float r = 1.0f;
+	float g = 0.0f;
+	float b = 0.0f;
+	float alpha = 0.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
+		alpha += 0.05f;
+
+		r = std::cos(alpha);
+		g = std::cos(2.0944 - alpha);
+		b = std::cos(4.1888 - alpha);
+
+
+
+
 		/* render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		shader.Bind();
-		shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+		shader.SetUniform4f("u_Color", r, g, b, 1.0f);
 	
 		va.Bind();
 		ib.Bind();
 
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-
-		if (r>1.0f)
-			inc = -0.05f;
-		else if (r<0.0f)
-			inc = 0.05f;
-		r += inc;
-
-
-
-
-
 
 
 		glfwSwapBuffers(window);
