@@ -47,10 +47,10 @@ int main(void)
 
 	float positions[] = 
 	{
-		-0.5f, -0.5f, 0.0f, 0.0f,//0
-		 0.5f, -0.5f, 1.0f, 0.0f,//1
-		 0.5f,  0.5f, 1.0f, 1.0f,//2
-		-0.5f,  0.5f, 0.0f, 1.0f //3
+		-0.5f, -0.5f, 0.0f, 0.0f,//bottom left
+		 0.5f, -0.5f, 1.0f, 0.0f,//bottom right
+		 0.5f,  0.5f, 1.0f, 1.0f,//top right
+		-0.5f,  0.5f, 0.0f, 1.0f //top left
 	};
 
 	unsigned int indices[] =
@@ -74,7 +74,8 @@ int main(void)
 	Shader shader("./resources/shaders/image2d.shader");
 	shader.Bind();
 
-
+	Texture texture("./resources/textures/a.png");
+	texture.Bind();
 
 	va.Unbind();
 	vb.Unbind();
@@ -98,7 +99,6 @@ int main(void)
 
 		shader.Bind();
 		
-		Texture texture("./resources/textures/Le.png");
 		texture.Bind(0);
 		shader.SetUniform1i("u_Texture", 0);
 
