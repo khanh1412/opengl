@@ -9,9 +9,12 @@
 #include"VertexArray.h"
 #include"Shader.h"
 #include"VertexBufferLayout.h"
+#include"Texture.h"
 
 
 #include<cmath>
+
+
 
 
 
@@ -42,12 +45,12 @@ int main(void)
 	{
 
 
-	float positions[12] = 
+	float positions[] = 
 	{
-		-0.5f, -0.5f,//0
-		 0.5f, -0.5f,//1
-		 0.5f,  0.5f,//2
-		-0.5f,  0.5f //3
+		-0.5f, -0.5f, 0.0f, 0.0f,//0
+		 0.5f, -0.5f, 1.0f, 0.0f,//1
+		 0.5f,  0.5f, 1.0f, 1.0f,//2
+		-0.5f,  0.5f, 0.0f, 1.0f //3
 	};
 
 	unsigned int indices[] =
@@ -58,19 +61,19 @@ int main(void)
 
 
 	VertexArray va;
-	VertexBuffer vb(positions, 4*2*sizeof(float));
+	VertexBuffer vb(positions, 4*4*sizeof(float));
 	VertexBufferLayout layout;
-	layout.Push_float(2);
+	layout.Push_float(2);//2 floats of rectangle vertices
+	layout.Push_float(2);//2 floats of texture coordinates
 
 	va.AddBuffer(vb, layout);
 
 	IndexBuffer ib(indices, 6);
 
 
-	Shader shader("./resources/shaders/basic.shader");
+	Shader shader("./resources/shaders/image2d.shader");
 	shader.Bind();
 
-	shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 
 	va.Unbind();
@@ -83,21 +86,10 @@ int main(void)
 	
 	
 
-	float r = 1.0f;
-	float g = 0.0f;
-	float b = 0.0f;
-	float alpha = 0.0f;
-
 	
 	while (!glfwWindowShouldClose(window))
 	{
 		
-		alpha += 0.05f;
-
-		r = std::cos(alpha);
-		g = std::cos(2.0944 - alpha);
-		b = std::cos(4.1888 - alpha);
-
 		
 
 
@@ -105,8 +97,13 @@ int main(void)
 		renderer.Clear();
 
 		shader.Bind();
-		shader.SetUniform4f("u_Color", r, g, b, 1.0f);
-	
+		
+		Texture texture("./resources/textures/Le.png");
+		texture.Bind(0);
+		shader.SetUniform1i("u_Texture", 0);
+
+
+
 		va.Bind();
 		ib.Bind();
 
