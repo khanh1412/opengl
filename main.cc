@@ -39,7 +39,7 @@ int main(void)
 
 	std::cout<<"OpenGL version: "<<glGetString(GL_VERSION)<<std::endl;
 
-	{
+{
 
 
 	float positions[] = 
@@ -74,11 +74,12 @@ int main(void)
 	Texture texture("./resources/textures/a.png");
 	texture.Bind();
 
+
 	va.Unbind();
 	vb.Unbind();
 	ib.Unbind();
 	shader.Unbind();
-
+	texture.Unbind();
 
 	Renderer renderer;
 	
@@ -100,7 +101,6 @@ int main(void)
 
 
 		shader.Bind();
-
 		va.Bind();
 		ib.Bind();
 
@@ -112,7 +112,7 @@ int main(void)
 		glfwPollEvents();
 	}
 	
-	}
+} // detele everything before OpenGL terminate	
 
 	glfwTerminate();
 	return 0;
