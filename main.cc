@@ -37,7 +37,7 @@ int main(void)
 	if (glewInit() != GLEW_OK)
 		std::cout<< "Error!"<<std::endl;
 
-	std::cout<<glGetString(GL_VERSION)<<std::endl;
+	std::cout<<"OpenGL version: "<<glGetString(GL_VERSION)<<std::endl;
 
 	{
 
