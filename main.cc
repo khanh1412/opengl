@@ -94,12 +94,12 @@ int main(void)
 		/* render here */
 		renderer.Clear();
 
-		shader.Bind();
 		
 		texture.Bind(0);
 		shader.SetUniform1i("u_Texture", 0);
 
 
+		shader.Bind();
 
 		va.Bind();
 		ib.Bind();
