@@ -1,5 +1,5 @@
-#include<GL/glew.h>
-#include<GLFW/glfw3.h>
+#include"GL/glew.h"
+#include"GLFW/glfw3.h"
 #include<iostream>
 
 
@@ -13,7 +13,8 @@
 
 
 #include<cmath>
-
+#include"glm/glm.hpp"
+#include"glm/gtc/matrix_transform.hpp"
 
 int main(void)
 {
@@ -67,9 +68,12 @@ int main(void)
 
 	IndexBuffer ib(indices, 6);
 
+	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
 
-	Shader shader("./resources/shaders/image2d.shader");
+
+	Shader shader("./resources/shaders/math.shader");
 	shader.Bind();
+	shader.SetUniformMat4f("u_MVP", proj);
 
 	Texture texture("./resources/textures/a.png");
 	texture.Bind();
