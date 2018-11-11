@@ -23,7 +23,7 @@ int main(void)
 	if (!glfwInit())
 		return -1;
 
-	GLFWwindow *window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
+	GLFWwindow *window = glfwCreateWindow(480, 480, "Hello World", nullptr, nullptr);
 
 	if (!window)
 	{
@@ -45,10 +45,10 @@ int main(void)
 
 	float positions[] = 
 	{
-		-0.5f, -0.5f, 0.0f, 0.0f,//bottom left
-		 0.5f, -0.5f, 1.0f, 0.0f,//bottom right
-		 0.5f,  0.5f, 1.0f, 1.0f,//top right
-		-0.5f,  0.5f, 0.0f, 1.0f //top left
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
+		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
+		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
+		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
 	};
 
 	unsigned int indices[] =
@@ -59,16 +59,16 @@ int main(void)
 
 
 	VertexArray va;
-	VertexBuffer vb(positions, 4*4*sizeof(float));
+	VertexBuffer vb(positions, 20*sizeof(float));
 	VertexBufferLayout layout;
-	layout.Push_float(2);//2 floats of rectangle vertices
+	layout.Push_float(3);//2 floats of rectangle vertices
 	layout.Push_float(2);//2 floats of texture coordinates
 
 	va.AddBuffer(vb, layout);
 
 	IndexBuffer ib(indices, 6);
 
-	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(-3.0f, 3.0f, -3.0f, 3.0f, -1.0f, 1.0f);
 
 
 	Shader shader("./resources/shaders/math.shader");
