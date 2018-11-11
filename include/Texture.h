@@ -10,6 +10,7 @@ class Texture
 		int m_Width, m_Height, m_BPP;
 	public:
 		Texture(const std::string& path);
+		//bind a buffer image. 1 channel
 		Texture(unsigned char* Image, int Height, int Width, int BPP);
 		~Texture();
 
