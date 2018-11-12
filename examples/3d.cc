@@ -56,12 +56,19 @@ int main(void)
 		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
 	};
 
-	unsigned int indices[] =
+	unsigned int indices1[] =
 	{
 		0, 2, 5,
 		2, 3, 5,
 		2, 1, 3,
 		3, 4, 1
+	};
+	unsigned int indices2[] =
+	{
+		1, 2, 4,
+		2, 3, 4,
+		2, 0, 3,
+		3, 5, 0
 	};
 
 	glEnable(GL_BLEND);
@@ -76,7 +83,8 @@ int main(void)
 
 	va.AddBuffer(vb, layout);
 
-	IndexBuffer ib(indices, 12);
+	IndexBuffer ib1(indices1, 12);
+	IndexBuffer ib2(indices2, 12);
 
 	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
@@ -96,7 +104,8 @@ int main(void)
 
 	va.Unbind();
 	vb.Unbind();
-	ib.Unbind();
+	ib1.Unbind();
+	ib2.Unbind();
 	shader.Unbind();
 	texture.Unbind();
 
@@ -126,12 +135,24 @@ int main(void)
 			glm::mat4 V = glm::lookAt( cam,glm::vec3( 0.f, 0.f, 0.f ), angle);
 			glm::mat4 MVP	= P*V;
 			shader.SetUniformMat4f("u_MVP", MVP);
+			
+			
+			float x = ((alpha / (2*3.1416)) - static_cast<float>(static_cast<int>(alpha / (2*3.1416))));
+			std::cout<<alpha<<" : "<<x<<std::endl;
+			if (x < 0.5)
+				renderer.Draw(va, ib1, shader);
+			else
+				renderer.Draw(va, ib2, shader);
+			
+			
+			
+			
 		}
 		
 		
 		
 	
-		renderer.Draw(va, ib, shader);
+		
 
 
 
