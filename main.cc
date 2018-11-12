@@ -233,6 +233,8 @@ int main(void)
 		{
 		glm::vec3 cam(cam_pos[0], cam_pos[1], cam_pos[2]);
 		}
+	
+		//std::cout<<"break"<<std::endl;
 
 		{
 			S.genIndices(cam_pos);
