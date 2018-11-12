@@ -211,6 +211,9 @@ int main(void)
 	float alpha = 0, beta = 0;
 	float cam_pos[3];
 
+
+	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		
@@ -229,16 +232,28 @@ int main(void)
 		cam_pos[2] = 2*std::cos(alpha);
 
 
-
 		{
-		glm::vec3 cam(cam_pos[0], cam_pos[1], cam_pos[2]);
-		}
-	
-		//std::cout<<"break"<<std::endl;
+			va.Bind();
+			shader.Bind();
 
-		{
+			glm::vec3 cam(cam_pos[0], cam_pos[1], cam_pos[2]);
+
+			glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+			glm::mat4 V = glm::lookAt(cam, glm::vec3(0.0f, 0.0f, 0.0f), up);
+			glm::mat4 MVP = P*V;
+
+			shader.SetUniformMat4f("u_MVP", MVP);
+
+
+
+
+
+
 			S.genIndices(cam_pos);
 			IndexBuffer ib(S.getIndices(), S.getCountIndices());
+			std::cout<<S.getCountIndices()<<std::endl;
+
 			renderer.Draw(va, ib, shader);
 		}
 		
