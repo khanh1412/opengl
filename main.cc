@@ -111,7 +111,7 @@ class Sphere
 					center[2] = (positions[5*bl+2] + positions[5*tr+2])/2;
 
 					float vec_mul = cam_pos[0]*center[0] + cam_pos[1]*center[1] + cam_pos[2]*center[2];
-					if (vec_mul < 0.0f)
+					if (vec_mul > 0.0f)
 
 					{
 						out_vec.push_back(bl);
@@ -189,7 +189,7 @@ int main(void)
 	float cam_pos[3];
 
 
-	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
+	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 0.0f, 100.0f);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -204,9 +204,9 @@ int main(void)
 		alpha += 0.01;
 		beta += 0.01;
 
-		cam_pos[0] = 2*std::sin(alpha);
+		cam_pos[0] = 3*std::sin(alpha);
 		cam_pos[1] = 0.0f;
-		cam_pos[2] = 2*std::cos(alpha);
+		cam_pos[2] = 3*std::cos(alpha);
 
 		{
 			va.Bind();
