@@ -161,53 +161,49 @@ int main(void)
 	{
 		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
 		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
+		 0.0f, -1.0f,-1.0f, 0.5f, 0.0f,//bottom middle
+		 0.0f,  1.0f,-1.0f, 0.5f, 1.0f,//top middle
 		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
 		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
 	};
 
-	unsigned int indices[] =
+	unsigned int indices1[] =
 	{
-		0, 1, 2,
-		2, 3, 0
+		0, 2, 5,
+		2, 3, 5,
+		2, 1, 3,
+		3, 4, 1
+	};
+	unsigned int indices2[] =
+	{
+		1, 2, 4,
+		2, 3, 4,
+		2, 0, 3,
+		3, 5, 0
 	};
 
 	*/
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	Sphere S(1.0f, 0.1f);
 
 	VertexArray va;
 	VertexBuffer vb(S.getPositions(), S.getCount()*sizeof(float));
+
+
 	VertexBufferLayout layout;
 	layout.Push_float(3);//2 floats of rectangle vertices
 	layout.Push_float(2);//2 floats of texture coordinates
 
 	va.AddBuffer(vb, layout);
 
-	/*
-	IndexBuffer ib(indices, 6);
-
-	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
-	glm::mat4 V = glm::lookAt( glm::vec3( 0.f, 0.f, 2.0f ),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, -1.0f, 0.0f)); 
-	glm::mat4 MVP	= P*V;
-
-	*/
-
-
 	Shader shader("./resources/shaders/math.shader");
 	shader.Bind();
-	//shader.SetUniformMat4f("u_MVP", MVP);
 
 	Texture texture("./resources/textures/a.png");
 	texture.Bind();
 
-	/*
-	va.Unbind();
-	vb.Unbind();
-	ib.Unbind();
-	shader.Unbind();
-	texture.Unbind();
-	*/
 	Renderer renderer;
 	
 	
@@ -236,19 +232,16 @@ int main(void)
 
 
 			glm::vec3 cam(cam_pos[0], cam_pos[1], cam_pos[2]);
-			//glm::vec3 cam(0.0f, 0.0f, 2.0f);
-			glm::vec3 angle(-std::sin(beta), -std::cos(beta), 0.0f);
-
-			glm::mat4 V = glm::lookAt( cam ,glm::vec3( 0.f, 0.f, 0.f ), angle);
-			glm::mat4 MVP	= P * V;
-			shader.SetUniformMat4f("u_MVP", MVP);
 		}
-		
+
 		{
 			S.genIndices();
 			IndexBuffer ib(S.getIndices(), S.getCountIndices());
 			renderer.Draw(va, ib, shader);
 		}
+		
+		
+		
 
 
 		glfwSwapBuffers(window);

@@ -50,26 +50,41 @@ int main(void)
 	{
 		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
 		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
+		 0.0f, -1.0f,-1.0f, 0.5f, 0.0f,//bottom middle
+		 0.0f,  1.0f,-1.0f, 0.5f, 1.0f,//top middle
 		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
 		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
 	};
 
-	unsigned int indices[] =
+	unsigned int indices1[] =
 	{
-		0, 1, 2,
-		2, 3, 0
+		0, 2, 5,
+		2, 3, 5,
+		2, 1, 3,
+		3, 4, 1
 	};
+	unsigned int indices2[] =
+	{
+		1, 2, 4,
+		2, 3, 4,
+		2, 0, 3,
+		3, 5, 0
+	};
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
 	VertexArray va;
-	VertexBuffer vb(positions, 20*sizeof(float));
+	VertexBuffer vb(positions, 30*sizeof(float));
 	VertexBufferLayout layout;
 	layout.Push_float(3);//2 floats of rectangle vertices
 	layout.Push_float(2);//2 floats of texture coordinates
 
 	va.AddBuffer(vb, layout);
 
-	IndexBuffer ib(indices, 6);
+	IndexBuffer ib1(indices1, 12);
+	IndexBuffer ib2(indices2, 12);
 
 	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
@@ -89,7 +104,8 @@ int main(void)
 
 	va.Unbind();
 	vb.Unbind();
-	ib.Unbind();
+	ib1.Unbind();
+	ib2.Unbind();
 	shader.Unbind();
 	texture.Unbind();
 
@@ -111,19 +127,32 @@ int main(void)
 		{
 			alpha += 0.01;
 			beta += 0.01;
-			glm::vec3 cam(2*std::sin(alpha), 0.0f, 2*std::cos(alpha));
+			glm::vec3 cam(2*std::sin(alpha), 2.0f, 2*std::cos(alpha));
 			//glm::vec3 cam(0.0f, 0.0f, 2.0f);
-			glm::vec3 angle(-std::sin(beta), -std::cos(beta), 0.0f);
+			//glm::vec3 angle(std::sin(beta), std::cos(beta), 0.0f);
+			glm::vec3 angle(0.0f, 1.0f, 0.0f);
 
 			glm::mat4 V = glm::lookAt( cam,glm::vec3( 0.f, 0.f, 0.f ), angle);
 			glm::mat4 MVP	= P*V;
 			shader.SetUniformMat4f("u_MVP", MVP);
+			
+			
+			float x = ((alpha / (2*3.1416)) - static_cast<float>(static_cast<int>(alpha / (2*3.1416))));
+			std::cout<<alpha<<" : "<<x<<std::endl;
+			if (x < 0.5)
+				renderer.Draw(va, ib1, shader);
+			else
+				renderer.Draw(va, ib2, shader);
+			
+			
+			
+			
 		}
 		
 		
 		
 	
-		renderer.Draw(va, ib, shader);
+		
 
 
 
