@@ -139,6 +139,9 @@ class Sphere
 		}
 
 };
+//camera
+float alpha = 0, beta = 0;
+float r = 1.5;
 
 
 int main(void)
@@ -192,8 +195,9 @@ int main(void)
 	
 	
 
-	float alpha = 0, beta = 0;
+
 	float cam_pos[3];
+
 
 
 	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 0.0f, 100.0f);
@@ -208,12 +212,9 @@ int main(void)
 		texture.Bind(0);
 		shader.SetUniform1i("u_Texture", 0);
 		
-		alpha += 0.01;
-		beta += 0.01;
-
-		cam_pos[0] = 1.5f*std::sin(alpha);
-		cam_pos[1] = 0.0f;
-		cam_pos[2] = 1.5f*std::cos(alpha);
+		cam_pos[0] = r * std::cos(beta) * std::sin(alpha);
+		cam_pos[1] = r * std::sin(beta);
+		cam_pos[2] = r * std::cos(beta) * std::cos(alpha);
 
 		{
 			va.Bind();
@@ -242,6 +243,10 @@ int main(void)
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		glfwWaitEvents();
+		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		glfwSetKeyCallback(window, key_callback);
 	}
 	
 } // detele everything before OpenGL terminate	
@@ -249,3 +254,19 @@ int main(void)
 	glfwTerminate();
 	return 0;
 }
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (action == GLFW_PRESS or action == GLFW_REPEAT)
+	{
+	if (key == GLFW_KEY_RIGHT) 
+			alpha += 0.01;
+	if (key == GLFW_KEY_LEFT) 
+			alpha -= 0.01;
+	if (key == GLFW_KEY_UP) 
+			beta += 0.01;
+	if (key == GLFW_KEY_DOWN) 
+			beta -= 0.01;
+	}
+}
+
