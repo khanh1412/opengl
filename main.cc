@@ -33,6 +33,8 @@ class Sphere
 	public:
 		Sphere(float r = 1.0f, float d = 0.001f)
 		{
+			indices = new unsigned int[1];	
+
 			float texCoord1, texCoord2;
 			float x, y, z;
 
@@ -46,15 +48,15 @@ class Sphere
 			for (int a=0; a<=4*n; a++)
 			for (int b=-n; b<=n; b++)
 			{
-				float alpha = a*pi/(2*n);
-				float beta = b*pi/(2*n);
+				float alpha = static_cast<float>(a)*pi/(2*n);
+				float beta = static_cast<float>(b)*pi/(2*n);
 
 				y = r*std::sin(beta);
 				x = r*std::cos(beta)*std::sin(alpha);
 				z = r*std::cos(beta)*std::cos(alpha);
 
-				texCoord1 = a/(4*n);
-				texCoord2 = 0.5f * (1.0f + b/n);
+				texCoord1 = static_cast<float>(a)/(4*n);
+				texCoord2 = 0.5f * (1.0f + static_cast<float>(b)/n);
 
 				ptr[0] = x; ptr[1]= y; ptr[2] = z; ptr[3] = texCoord1; ptr[4] = texCoord2;
 
@@ -64,7 +66,8 @@ class Sphere
 		}
 		~Sphere()
 		{
-			delete positions;
+			delete[] positions;
+			delete[] indices;
 		}
 
 		int getCount()
@@ -87,7 +90,8 @@ class Sphere
 
 		void genIndices(float *cam_pos)
 		{
-			delete indices;
+			delete[] indices;
+
 			float center[3];
 
 			std::vector<int> out_vec;
@@ -156,37 +160,10 @@ int main(void)
 
 {
 
-	/*
-	float positions[] = 
-	{
-		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
-		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
-		 0.0f, -1.0f,-1.0f, 0.5f, 0.0f,//bottom middle
-		 0.0f,  1.0f,-1.0f, 0.5f, 1.0f,//top middle
-		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
-		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
-	};
-
-	unsigned int indices1[] =
-	{
-		0, 2, 5,
-		2, 3, 5,
-		2, 1, 3,
-		3, 4, 1
-	};
-	unsigned int indices2[] =
-	{
-		1, 2, 4,
-		2, 3, 4,
-		2, 0, 3,
-		3, 5, 0
-	};
-
-	*/
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Sphere S(1.0f, 0.1f);
+	Sphere S(1.0f, 0.001f);
 
 	VertexArray va;
 	VertexBuffer vb(S.getPositions(), S.getCount()*sizeof(float));
@@ -201,7 +178,7 @@ int main(void)
 	Shader shader("./resources/shaders/math.shader");
 	shader.Bind();
 
-	Texture texture("./resources/textures/a.png");
+	Texture texture("./resources/textures/world.png");
 	texture.Bind();
 
 	Renderer renderer;
@@ -231,7 +208,6 @@ int main(void)
 		cam_pos[1] = 0.0f;
 		cam_pos[2] = 2*std::cos(alpha);
 
-
 		{
 			va.Bind();
 			shader.Bind();
@@ -250,9 +226,10 @@ int main(void)
 
 
 
-			S.genIndices(cam_pos);
+			S.genIndices(&(cam_pos[0]));
+			
 			IndexBuffer ib(S.getIndices(), S.getCountIndices());
-			std::cout<<S.getCountIndices()<<std::endl;
+			
 
 			renderer.Draw(va, ib, shader);
 		}
