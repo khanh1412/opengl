@@ -111,7 +111,7 @@ class Sphere
 					center[2] = (positions[5*bl+2] + positions[5*tr+2])/2;
 
 					float vec_mul = cam_pos[0]*center[0] + cam_pos[1]*center[1] + cam_pos[2]*center[2];
-					if (vec_mul > 0.0f)
+					if (vec_mul < 0.0f)
 
 					{
 						out_vec.push_back(bl);
