@@ -45,10 +45,10 @@ int main(void)
 
 	float positions[] = 
 	{
-		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
-		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
-		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
-		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
+		-0.8f, -0.8f, 1.0f, 0.0f, 0.0f,//bottom left
+		 1.0f, -1.0f, 1.0f, 1.0f, 0.0f,//bottom right
+		 1.0f,  1.0f, -1.0f, 1.0f, 1.0f,//top right
+		-1.0f,  1.0f, -1.0f, 0.0f, 1.0f //top left
 	};
 
 	unsigned int indices[] =
@@ -68,12 +68,17 @@ int main(void)
 
 	IndexBuffer ib(indices, 6);
 
-	glm::mat4 proj = glm::ortho(-3.0f, 3.0f, -3.0f, 3.0f, -1.0f, 1.0f);
+	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+	glm::mat4 P = glm::perspective(60.0f, (float)480 / (float)480, 0.1f, 100.0f);
+	glm::mat4 V = glm::lookAt( glm::vec3( 0.f, 0.f, 2.0f ),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, 1.0f, 0.0f ) );    
+	glm::mat4 MVP	= P*V;
+
+
 
 
 	Shader shader("./resources/shaders/math.shader");
 	shader.Bind();
-	shader.SetUniformMat4f("u_MVP", proj);
+	shader.SetUniformMat4f("u_MVP", MVP);
 
 	Texture texture("./resources/textures/a.png");
 	texture.Bind();
@@ -93,9 +98,6 @@ int main(void)
 	while (!glfwWindowShouldClose(window))
 	{
 		
-		
-
-
 		/* render here */
 		renderer.Clear();
 
