@@ -16,6 +16,9 @@
 #include"glm/glm.hpp"
 #include"glm/gtc/matrix_transform.hpp"
 
+#define HEIGHT 480
+#define WIDTH 640
+
 int main(void)
 {
 	//intialize the library
@@ -23,7 +26,7 @@ int main(void)
 	if (!glfwInit())
 		return -1;
 
-	GLFWwindow *window = glfwCreateWindow(480, 480, "Hello World", nullptr, nullptr);
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World", nullptr, nullptr);
 
 	if (!window)
 	{
@@ -45,7 +48,7 @@ int main(void)
 
 	float positions[] = 
 	{
-		-0.8f, -0.8f, 1.0f, 0.0f, 0.0f,//bottom left
+		-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,//bottom left
 		 1.0f, -1.0f, 1.0f, 1.0f, 0.0f,//bottom right
 		 1.0f,  1.0f, -1.0f, 1.0f, 1.0f,//top right
 		-1.0f,  1.0f, -1.0f, 0.0f, 1.0f //top left
@@ -69,8 +72,8 @@ int main(void)
 	IndexBuffer ib(indices, 6);
 
 	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-	glm::mat4 P = glm::perspective(60.0f, (float)480 / (float)480, 0.1f, 100.0f);
-	glm::mat4 V = glm::lookAt( glm::vec3( 0.f, 0.f, 2.0f ),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, 1.0f, 0.0f ) );    
+	glm::mat4 P = glm::perspective(60.0f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
+	glm::mat4 V = glm::lookAt( glm::vec3( 0.f, 0.f, 2.0f ),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, -1.0f, 0.0f)); 
 	glm::mat4 MVP	= P*V;
 
 
