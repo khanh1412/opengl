@@ -244,7 +244,7 @@ int main(void)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-		glfwWaitEvents();
+//		glfwWaitEvents();
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		glfwSetKeyCallback(window, key_callback);
 	}
