@@ -50,26 +50,30 @@ int main(void)
 	{
 		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
 		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
+		 0.0f, -1.0f,-1.0f, 0.5f, 0.0f,//bottom middle
+		 0.0f,  1.0f,-1.0f, 0.5f, 1.0f,//top middle
 		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
 		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
 	};
 
 	unsigned int indices[] =
 	{
-		0, 1, 2,
-		2, 3, 0
+		0, 2, 5,
+		2, 3, 5,
+		2, 1, 3,
+		3, 4, 1
 	};
 
 
 	VertexArray va;
-	VertexBuffer vb(positions, 20*sizeof(float));
+	VertexBuffer vb(positions, 30*sizeof(float));
 	VertexBufferLayout layout;
 	layout.Push_float(3);//2 floats of rectangle vertices
 	layout.Push_float(2);//2 floats of texture coordinates
 
 	va.AddBuffer(vb, layout);
 
-	IndexBuffer ib(indices, 6);
+	IndexBuffer ib(indices, 12);
 
 	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
@@ -111,9 +115,10 @@ int main(void)
 		{
 			alpha += 0.01;
 			beta += 0.01;
-			glm::vec3 cam(2*std::sin(alpha), 0.0f, 2*std::cos(alpha));
+			glm::vec3 cam(2*std::sin(alpha), 2.0f, 2*std::cos(alpha));
 			//glm::vec3 cam(0.0f, 0.0f, 2.0f);
-			glm::vec3 angle(-std::sin(beta), -std::cos(beta), 0.0f);
+			//glm::vec3 angle(std::sin(beta), std::cos(beta), 0.0f);
+			glm::vec3 angle(0.0f, 1.0f, 0.0f);
 
 			glm::mat4 V = glm::lookAt( cam,glm::vec3( 0.f, 0.f, 0.f ), angle);
 			glm::mat4 MVP	= P*V;
