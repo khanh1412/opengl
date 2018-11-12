@@ -163,7 +163,7 @@ int main(void)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Sphere S(1.0f, 0.001f);
+	Sphere S(1.0f, 0.01f);
 
 	VertexArray va;
 	VertexBuffer vb(S.getPositions(), S.getCount()*sizeof(float));
