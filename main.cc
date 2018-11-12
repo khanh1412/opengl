@@ -19,7 +19,7 @@
 #define WIDTH 640
 
 
-float pi = M_PI;
+float pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164062;
 
 
 class Sphere
@@ -29,7 +29,7 @@ class Sphere
 		int count;
 		float *positions;
 		int hm_indices;
-		float *indices;
+		unsigned int *indices;
 	public:
 		Sphere(float r = 1.0f, float d = 0.001f)
 		{
@@ -78,9 +78,9 @@ class Sphere
 		}
 		int getCountIndices()
 		{
-			return hm_indicies;
+			return hm_indices;
 		}
-		unsigned int *getIndices
+		unsigned int *getIndices()
 		{
 			return indices;
 		}
@@ -124,7 +124,7 @@ class Sphere
 			indices = new unsigned int[hm_indices];
 
 			for (int i=0; i<hm_indices; i++)
-				indices[i] = out_vec->at(i);
+				indices[i] = out_vec.at(i);
 		}
 
 };
@@ -220,22 +220,22 @@ int main(void)
 
 		texture.Bind(0);
 		shader.SetUniform1i("u_Texture", 0);
+		
+		alpha += 0.01;
+		beta += 0.01;
+
+		cam_pos[0] = 2*std::sin(alpha);
+		cam_pos[1] = 0.0f;
+		cam_pos[2] = 2*std::cos(alpha);
+
+
+
 		{
-			alpha += 0.01;
-			beta += 0.01;
-
-			cam_pos[0] = 2*std::sin(alpha);
-			cam_pos[1] = 0.0f;
-			cam_pos[2] = 2*std::cos(alpha);
-
-
-
-
-			glm::vec3 cam(cam_pos[0], cam_pos[1], cam_pos[2]);
+		glm::vec3 cam(cam_pos[0], cam_pos[1], cam_pos[2]);
 		}
 
 		{
-			S.genIndices();
+			S.genIndices(cam_pos);
 			IndexBuffer ib(S.getIndices(), S.getCountIndices());
 			renderer.Draw(va, ib, shader);
 		}
