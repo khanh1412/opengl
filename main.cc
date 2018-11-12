@@ -138,7 +138,7 @@ int main(void)
 			
 			
 			float x = ((alpha / (2*3.1416)) - static_cast<float>(static_cast<int>(alpha / (2*3.1416))));
-			std::cout<<alpha<<" : "<<x<<std::endl;
+//			std::cout<<alpha<<" : "<<x<<std::endl;
 			if (x < 0.5)
 				renderer.Draw(va, ib1, shader);
 			else
