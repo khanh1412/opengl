@@ -64,6 +64,9 @@ int main(void)
 		3, 4, 1
 	};
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	VertexArray va;
 	VertexBuffer vb(positions, 30*sizeof(float));
