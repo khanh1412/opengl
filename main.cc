@@ -16,7 +16,7 @@
 #include"glm/glm.hpp"
 #include"glm/gtc/matrix_transform.hpp"
 
-#define HEIGHT 480
+#define HEIGHT 640
 #define WIDTH 640
 
 int main(void)
@@ -72,7 +72,7 @@ int main(void)
 	IndexBuffer ib(indices, 6);
 
 	//glm::mat4 P = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-	glm::mat4 P = glm::perspective(60.0f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
+	glm::mat4 P = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 1.0f, 100.0f);
 	glm::mat4 V = glm::lookAt( glm::vec3( 0.f, 0.f, 2.0f ),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, -1.0f, 0.0f)); 
 	glm::mat4 MVP	= P*V;
 
@@ -97,7 +97,7 @@ int main(void)
 	
 	
 
-	float alpha = 0;
+	float alpha = 0, beta = 0;
 	
 	while (!glfwWindowShouldClose(window))
 	{
@@ -110,7 +110,12 @@ int main(void)
 		shader.SetUniform1i("u_Texture", 0);
 		{
 		alpha += 0.01;
-		glm::mat4 V = glm::lookAt( glm::vec3(2*std::sin(alpha), 0.0f, 2*std::cos(alpha)),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, -1.0f, 0.0f));
+		beta += 0.01;
+		glm::vec3 cam(2*std::sin(alpha), 0.0f, 2*std::cos(alpha));
+		//glm::vec3 cam(0.0f, 0.0f, 2.0f);
+		glm::vec3 angle(-std::sin(beta), -std::cos(beta), 0.0f);
+
+		glm::mat4 V = glm::lookAt( cam,glm::vec3( 0.f, 0.f, 0.f ), angle);
 		glm::mat4 MVP	= P*V;
 		shader.SetUniformMat4f("u_MVP", MVP);
 		}
