@@ -109,25 +109,20 @@ int main(void)
 		texture.Bind(0);
 		shader.SetUniform1i("u_Texture", 0);
 		{
-		alpha += 0.01;
-		beta += 0.01;
-		glm::vec3 cam(2*std::sin(alpha), 0.0f, 2*std::cos(alpha));
-		//glm::vec3 cam(0.0f, 0.0f, 2.0f);
-		glm::vec3 angle(-std::sin(beta), -std::cos(beta), 0.0f);
+			alpha += 0.01;
+			beta += 0.01;
+			glm::vec3 cam(2*std::sin(alpha), 0.0f, 2*std::cos(alpha));
+			//glm::vec3 cam(0.0f, 0.0f, 2.0f);
+			glm::vec3 angle(-std::sin(beta), -std::cos(beta), 0.0f);
 
-		glm::mat4 V = glm::lookAt( cam,glm::vec3( 0.f, 0.f, 0.f ), angle);
-		glm::mat4 MVP	= P*V;
-		shader.SetUniformMat4f("u_MVP", MVP);
+			glm::mat4 V = glm::lookAt( cam,glm::vec3( 0.f, 0.f, 0.f ), angle);
+			glm::mat4 MVP	= P*V;
+			shader.SetUniformMat4f("u_MVP", MVP);
 		}
 		
 		
 		
-		
-
-		shader.Bind();
-		va.Bind();
-		ib.Bind();
-
+	
 		renderer.Draw(va, ib, shader);
 
 
