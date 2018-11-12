@@ -48,10 +48,10 @@ int main(void)
 
 	float positions[] = 
 	{
-		-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,//bottom left
-		 1.0f, -1.0f, 1.0f, 1.0f, 0.0f,//bottom right
-		 1.0f,  1.0f, -1.0f, 1.0f, 1.0f,//top right
-		-1.0f,  1.0f, -1.0f, 0.0f, 1.0f //top left
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,//bottom left
+		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,//bottom right
+		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,//top right
+		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f //top left
 	};
 
 	unsigned int indices[] =
@@ -97,6 +97,7 @@ int main(void)
 	
 	
 
+	float alpha = 0;
 	
 	while (!glfwWindowShouldClose(window))
 	{
@@ -104,10 +105,19 @@ int main(void)
 		/* render here */
 		renderer.Clear();
 
-		
+
 		texture.Bind(0);
 		shader.SetUniform1i("u_Texture", 0);
-
+		{
+		alpha += 0.01;
+		glm::mat4 V = glm::lookAt( glm::vec3(2*std::sin(alpha), 0.0f, 2*std::cos(alpha)),glm::vec3( 0.f, 0.f, 0.f ),glm::vec3( 0.0f, -1.0f, 0.0f));
+		glm::mat4 MVP	= P*V;
+		shader.SetUniformMat4f("u_MVP", MVP);
+		}
+		
+		
+		
+		
 
 		shader.Bind();
 		va.Bind();
