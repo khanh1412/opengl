@@ -118,22 +118,31 @@ void Engine::draw(Object *obj)
 	Model = glm::rotate(Model, rotate[2], glm::vec3(0.0f, 0.0f, 1.0f));
 	Model = glm::scale(Model, glm::vec3(scale[0], scale[1], scale[2]));
 
-	
-	s->SetUniformMat4f("u_Projection", Projection);
-	s->SetUniformMat4f("u_View", View);
-	s->SetUniformMat4f("u_Model", Model);
+
+	glm::mat4 MVP = Projection * View * Model;
+
+	s->SetUniformMat4f("u_MVP", MVP);
 	/*
 	glm::vec4 v(cam[0], cam[1], cam[2], 1.0f);
-	v = Projection*View*Model*v;
+	glm::mat4 Model1(1.0f);
+	Model1 = glm::translate(Model1, glm::vec3(-shift[0], -shift[1], -shift[2]));
+	Model1 = glm::rotate(Model1, -rotate[0], glm::vec3(1.0f, 0.0f, 0.0f));
+	Model1 = glm::rotate(Model1, -rotate[1], glm::vec3(0.0f, 1.0f, 0.0f));
+	Model1 = glm::rotate(Model1, -rotate[2], glm::vec3(0.0f, 0.0f, 1.0f));
+	Model1 = glm::scale(Model1, glm::vec3(-scale[0], -scale[1], -scale[2]));
+	v = Model1*v;
 
-	float obj_cam[3] = {v[0]/v[3], v[1]/v[3], v[2]/v[3]};
+	float *obj_cam = new float[3];
+	for (int i=0; i<3; i++) obj_cam[i] = v[i]/v[3];
 	*/
 	float *obj_cam = cam;
-
 
 	VertexArray *va = obj->getVertexArray();
 	IndexBuffer *ib = obj->getIndexBuffer(&(obj_cam[0]));
 
+	//delete obj_cam;
+	//std::cout<<"    cam : "<<cam[0]<<" "<<cam[1]<<" "<<cam[2]<<std::endl;
+	//std::cout<<"obj_cam : "<<obj_cam[0]<<" "<<obj_cam[1]<<" "<<obj_cam[2]<<std::endl;
 	Texture *t = obj->getTexture();
 
 
