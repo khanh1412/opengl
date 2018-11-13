@@ -112,7 +112,7 @@ void Engine::draw(Object *obj)
 	Texture *t = obj->getTexture();
 
 
-	glm::mat4 Model, View, Projection;
+	glm::mat4 Model(1.0f), View, Projection;
 
 	Projection = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
 
@@ -124,22 +124,43 @@ void Engine::draw(Object *obj)
 	Model = glm::rotate(Model, rotate[2], glm::vec3(0.0f, 0.0f, 1.0f));
 	Model = glm::scale(Model, glm::vec3(scale[0], scale[1], scale[2]));
 
-	/*	
+	
 	s->SetUniformMat4f("u_Projection", Projection);
 	s->SetUniformMat4f("u_View", View);
 	s->SetUniformMat4f("u_Model", Model);
-	*/
-	glm::mat4 MVP = Projection*View*Model;
-	s->SetUniformMat4f("u_MVP", MVP);
+	
 	renderer->Draw(*va, *ib, *s);
 	delete ib;
 }
+/*
+void Engine::draw(Object *obj)
+{
+        Shader *s = obj->getShader();
+        VertexArray *va = obj->getVertexArray();
+        IndexBuffer *ib = obj->getIndexBuffer(cam);
+        Texture *t = obj->getTexture();
 
+        glm::mat4 P = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
+        glm::vec3 cam(this->cam[0], this->cam[1], this->cam[2]);
+        glm::vec3 center(this->center[0], this->center[1], this->center[2]);
+        glm::vec3 up(this->up[0], this->up[1], this->up[2]);
+
+        glm::mat4 V = glm::lookAt(cam, center, up);
+
+        glm::mat4 MVP = P*V;
+
+        s->SetUniformMat4f("u_MVP", MVP);
+
+        renderer->Draw(*va, *ib, *s);
+        delete ib;
+}
+*/
 void Engine::draw(std::vector<Object*> *objs)
 {
 	for (int i=0; i<objs->size(); i++)
 		draw(objs->at(i));
 }
+
 GLFWwindow *Engine::getWindow()
 {
 	return window;
