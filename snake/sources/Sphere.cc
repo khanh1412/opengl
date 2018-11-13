@@ -3,8 +3,8 @@
 Sphere::Sphere(float x, float y, float z, float r, float d)
 	: r(r), d(d)
 {
-	pos[0] = x;
-	pos[1] = y;
+	pos[0] = y;
+	pos[1] = x;
 	pos[2] = z;
 }
 Sphere::~Sphere()
@@ -91,6 +91,6 @@ int Sphere::getIndices(float *cam_pos, unsigned int*& indices)
 
 			for (int i=0; i<hm_indices; i++)
 				indices[i] = out_vec.at(i);
-			std::cout<<hm_indices<<std::endl;
+			//std::cout<<hm_indices<<std::endl;
 			return hm_indices;
 }
