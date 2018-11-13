@@ -233,7 +233,7 @@ int main(void)
 			
 			IndexBuffer ib(S.getIndices(), S.getCountIndices());
 			
-			//std::cout<<"Drawing : "<<S.getCountIndices()/3<<" triangles in total "<<S.getTotalCountIndices()/3<<std::endl;
+			std::cout<<"Drawing : "<<S.getCountIndices()/3<<" triangles in total "<<S.getTotalCountIndices()/3<<std::endl;
 			renderer.Draw(va, ib, shader);
 		}
 		
@@ -242,9 +242,9 @@ int main(void)
 
 
 		glfwSwapBuffers(window);
-		glfwPollEvents();
+		//glfwPollEvents();
 
-//		glfwWaitEvents();
+		glfwWaitEvents();
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		glfwSetKeyCallback(window, key_callback);
 	}
@@ -272,12 +272,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if (key == GLFW_KEY_UP) 
 		{
 			std::cout<<"GLFW_KEY_UP"<<std::endl;
-			beta += 0.01;
+			if (beta < pi/2 - 0.01)
+				beta += 0.01;
 		}
 		if (key == GLFW_KEY_DOWN) 
 		{
 			std::cout<<"GLFW_KEY_DOWN"<<std::endl;
-			beta -= 0.01;
+			if (beta > -pi/2 + 0.01)
+				beta -= 0.01;
 		}
 	}
 }
