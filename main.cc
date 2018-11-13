@@ -11,7 +11,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 #include<ctime>
-
+#include<cmath>
 int main()
 {
 	Engine E(640, 480, "world");
@@ -20,7 +20,7 @@ int main()
 	Object *S = new Sphere(0, 0, 0, 0.5);
 	S->setTexture("./resources/textures/a.png");
 	
-	Object *C = new Cylinder(0, 1, 0, 0, -1, 0, 0.5);
+	Object *C = new Cylinder(0, 1, 0, 0, -1, 0, 0.5, 0.785);
 	//C->setTexture("./resources/textures/a.png");
 
 
@@ -32,13 +32,10 @@ int main()
 	{
 		std::clock_t t0 = clock();
 
-		if (x>1 or x<-1)
-			d = -d;
-		x += d;
-
-
+		x+= d;
 		E.clear();
-		E.setCam(0, x, 2);
+		E.setCam(2*std::sin(x), 0, 2*std::cos(x));
+		
 		E.setCenter(0, 0, 0);
 		E.setUp(0,1,0);
 		E.setPov(1.0);

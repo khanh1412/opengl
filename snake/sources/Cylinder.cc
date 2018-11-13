@@ -43,33 +43,33 @@ int Cylinder::getPositions(float*& positions)
 	e1[2] = e1[2]/k;
 	}
 	//find e2 (e2*e1 == 0, e2*(pos2-pos1) == 0)
-	float d, dx, dy, dz;
+	float det, dx, dy, dz;
 	if (e1[1]*pos[2] - e1[2]*pos[1] != 0)
 	{
-		d = e1[1]*pos[2] - e1[2]*pos[1];
+		det = e1[1]*pos[2] - e1[2]*pos[1];
 		dy = -e1[0]*pos[2] + e1[2]*pos[0];
 		dz = -e1[1]*pos[0] + e1[0]*pos[1];
 		e2[0] = 1;
-		e2[1] = dy/d;
-		e2[2] = dz/d;
+		e2[1] = dy/det;
+		e2[2] = dz/det;
 	}
 	else if (e1[0]*pos[1] - e1[1]*pos[0] != 0)
 	{
-		d = e1[0]*pos[1] - e1[1]*pos[0];
+		det = e1[0]*pos[1] - e1[1]*pos[0];
 		dx = -e1[2]*pos[1] + e1[1]*pos[2];
 		dy = -e1[0]*pos[2] + e1[2]*pos[0];
-		e2[0] = dx/d;
-		e2[1] = dy/d;
+		e2[0] = dx/det;
+		e2[1] = dy/det;
 		e2[2] = 1;
 	}
 	else
 	{
-		d = e1[0]*pos[2] - e1[2]*pos[0];
+		det = e1[0]*pos[2] - e1[2]*pos[0];
 		dx = -e1[1]*pos[2] + e1[2]*pos[1];
 		dz = -e1[0]*pos[1] + e1[1]*pos[0];
-		e2[0] = dx/d;
+		e2[0] = dx/det;
 		e2[1] = 1;
-		e2[2] = dz/d;
+		e2[2] = dz/det;
 	}
 	
 	{
@@ -79,8 +79,8 @@ int Cylinder::getPositions(float*& positions)
 	e2[2] = e2[2]/k;
 	}
 
-	std::cout<<"e1 = ("<<e1[0]<<", "<<e1[1]<<", "<<e1[2]<<")"<<std::endl;
-	std::cout<<"e2 = ("<<e2[0]<<", "<<e2[1]<<", "<<e2[2]<<")"<<std::endl;
+	//std::cout<<"e1 = ("<<e1[0]<<", "<<e1[1]<<", "<<e1[2]<<")"<<std::endl;
+	//std::cout<<"e2 = ("<<e2[0]<<", "<<e2[1]<<", "<<e2[2]<<")"<<std::endl;
 
 
 	//
@@ -98,7 +98,7 @@ int Cylinder::getPositions(float*& positions)
 	for (int i=0; i<=nr; i++)
 	{
 		float alpha = static_cast<float>(i)*2*pi/nr;
-
+		//std::cout<<alpha<<std::endl;
                 float x = r*(std::cos(alpha)*e1[0] + std::sin(alpha)*e2[0]);
                 float y = r*(std::cos(alpha)*e1[1] + std::sin(alpha)*e2[1]);
                 float z = r*(std::cos(alpha)*e1[2] + std::sin(alpha)*e2[2]);
@@ -109,7 +109,7 @@ int Cylinder::getPositions(float*& positions)
 		z1 = pos1[2] + z;
 
 		texCoordx1 = static_cast<float>(i)/nr;
-		std::cout<< x*x + y*y + z*z <<std::endl;
+		//std::cout<< std::sqrt(x*x + y*y + z*z) <<std::endl;
 		texCoordy1 = 1;
 
 		x2 = pos2[0] + x;
@@ -132,11 +132,13 @@ int Cylinder::getPositions(float*& positions)
 		ptr[3] = texCoordx2;
 		ptr[4] = texCoordy2;
 		ptr += 5;
+
+		//std::cout<<x1<<" : "<<y1<<" : "<<z1<<std::endl;
 	}
-	std::cout<<count<<":"<<nr<<std::endl;
+	//std::cout<<count<<":"<<nr<<std::endl;
 
 
-	__builtin_trap();
+	//__builtin_trap();
 	return count;
 }
 int Cylinder::getIndices(float *cam_pos, unsigned int*& indices)
@@ -151,18 +153,22 @@ int Cylinder::getIndices(float *cam_pos, unsigned int*& indices)
 
 	for (int i=0; i<nr; i++)
 	{
+		int tl = 2*i;
+		int bl = 2*i+1;
+		int tr = 2*i+2;
+		int br = 2*i+3;
+
+
+
+
                 float alpha = (0.5+static_cast<float>(i))*2*pi/nr;
 
-                float x = r*std::cos(alpha)*e1[0] + r*std::sin(alpha)*e2[0];
-                float y = r*std::cos(alpha)*e1[1] + r*std::sin(alpha)*e2[1];
-                float z = r*std::cos(alpha)*e1[2] + r*std::sin(alpha)*e2[2];
-
-//		if (x*cam[0] + y*cam[1] + z*cam[2] > 0)
+                float x = r*(std::cos(alpha)*e1[0] + std::sin(alpha)*e2[0]);
+                float y = r*(std::cos(alpha)*e1[1] + std::sin(alpha)*e2[1]);
+                float z = r*(std::cos(alpha)*e1[2] + std::sin(alpha)*e2[2]);
+		//std::cout<<x*cam[0] + y*cam[1] + z*cam[2]<<std::endl;
+		if (x*cam[0] + y*cam[1] + z*cam[2] > 0)
 		{
-			int tl = i;
-			int bl = i+1;
-			int tr = i+2;
-			int br = i+3;
                         out_vec.push_back(bl);
                         out_vec.push_back(br);
                         out_vec.push_back(tl);
