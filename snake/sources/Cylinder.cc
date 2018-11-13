@@ -119,7 +119,10 @@ int Cylinder::getPositions(float*& positions)
 		ptr[4] = texCoordy2;
 		ptr += 5;
 	}
-	std::cout<<count<<std::endl;
+	std::cout<<count<<":"<<nr<<std::endl;
+
+
+	__builtin_trap();
 	return count;
 }
 int Cylinder::getIndices(float *cam_pos, unsigned int*& indices)
@@ -140,7 +143,7 @@ int Cylinder::getIndices(float *cam_pos, unsigned int*& indices)
                 float y = r*std::cos(alpha)*e1[1] + r*std::sin(alpha)*e2[1];
                 float z = r*std::cos(alpha)*e1[2] + r*std::sin(alpha)*e2[2];
 
-		if (x*cam[0] + y*cam[1] + z*cam[2] > 0)
+//		if (x*cam[0] + y*cam[1] + z*cam[2] > 0)
 		{
 			int tl = i;
 			int bl = i+1;
