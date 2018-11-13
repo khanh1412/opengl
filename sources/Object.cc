@@ -35,6 +35,7 @@ IndexBuffer *Object::getIndexBuffer(float *cam)
 	int count_indices = getIndices(cam, indices);
 	auto ib = new IndexBuffer(indices, count_indices);
 	ib->Bind();
+	delete indices;
 	return ib;
 }
 void Object::setShader(const std::string &name)
