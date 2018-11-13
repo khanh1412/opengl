@@ -22,7 +22,7 @@ lib: clean
 
 
 main:
-	$(CC) $(CXX_FLAGS) -o run main.cc snake/sources/Sphere.cc ./libRenderer.so ./libEngine.so $(LIB_FLAGS) -I./snake/include
+	$(CC) $(CXX_FLAGS) -o run main.cc snake/sources/Sphere.cc snake/sources/Rectangle.cc ./libRenderer.so ./libEngine.so $(LIB_FLAGS) -I./snake/include
 
 
 3d:

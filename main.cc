@@ -1,5 +1,6 @@
 #include"Engine.h"
 #include"Sphere.h"
+#include"Rectangle.h"
 #include<iostream>
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -10,8 +11,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main()
 {
-	Object *S = new Sphere(0.5, 0.5, 0.5);
 	Engine E(640, 480, "world");
+
+
+	Object *S = new Sphere(0.5, 0.5, 0.5);
+	Object *R = new Rectangle(1, 0, 1, -1, 0, 1, 1, 1, 0);
+	R->setTexture("./resources/textures/a.png");
 	while (!E.isClosed())
 	{
 		E.clear();
@@ -20,6 +25,7 @@ int main()
 		E.setUp(0,1,0);
 		E.setPov(2.0);
 
+		E.draw(R);
 		E.draw(S);
 		E.swapBuffers();
 		E.pollEvents();

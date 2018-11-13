@@ -26,6 +26,7 @@ VertexArray *Object::getVertexArray()
 		layout->Push_float(2);
 		va->AddBuffer(*vb, *layout);
 	}
+	va->Bind();
 	return va;
 }
 IndexBuffer *Object::getIndexBuffer(float *cam)
@@ -33,11 +34,12 @@ IndexBuffer *Object::getIndexBuffer(float *cam)
 	unsigned int *indices;
 	int count_indices = getIndices(cam, indices);
 	auto ib = new IndexBuffer(indices, count_indices);
+	ib->Bind();
 	return ib;
 }
 void Object::setShader(const std::string &name)
 {
-	s = new Shader(name.c_str());
+	s = new Shader(name);
 }
 Shader *Object::getShader()
 {
@@ -48,6 +50,7 @@ Shader *Object::getShader()
 		this->setTexture("./resources/textures/world.png");
 
 	}
+	s->Bind();
 	return s;
 }
 void Object::setTexture(const std::string &path)
@@ -58,6 +61,13 @@ void Object::setTexture(const std::string &path)
 		s = new Shader("./resources/shaders/math.shader");
 	}
 	s->Bind();
-	t = new Texture(path.c_str());
+	t = new Texture(path);
 	t->Bind();
+}
+Texture *Object::getTexture()
+{
+	if (t==nullptr)
+		this->getShader();
+	t->Bind();
+	return t;
 }

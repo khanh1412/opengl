@@ -42,6 +42,7 @@ class Object
 		void setShader(const std::string &path);
 		Shader *getShader();
 		void setTexture(const std::string &path);
+		Texture *getTexture();
 
 };
 class Engine
@@ -67,6 +68,7 @@ class Engine
 		void pollEvents();
 
 		void draw(Object *obj);
+		void draw(std::vector<Object*> *objs);
 		void setCam(float x, float y, float z);
 		void setCenter(float x, float y, float z);
 		void setUp(float x, float y, float z);
