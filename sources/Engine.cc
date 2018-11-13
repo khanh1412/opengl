@@ -5,7 +5,7 @@ Engine::Engine()
 {}
 
 Engine::Engine(int Width, int Height, const std::string &name)
-	: Width(Width), Height(Height), name(new std::string(name)), renderer(new Renderer()), cam(nullptr), center(nullptr), pov(0)
+	: Width(Width), Height(Height), name(new std::string(name)), renderer(new Renderer()), cam(nullptr), center(nullptr), up(nullptr), pov(0)
 {
 	if (!glfwInit())
 	{
@@ -22,6 +22,10 @@ Engine::Engine(int Width, int Height, const std::string &name)
 		std::cout<<"window creation failed!"<<std::endl;
 		__builtin_trap();
 		return;
+	}
+	else
+	{
+		std::cout<<"window created "<<Width<<"x"<<Height<<std::endl;
 	}
 
 	glfwMakeContextCurrent(window);
@@ -105,7 +109,7 @@ void Engine::draw(Object *obj)
 
 	va->Bind();
 	s->Bind();
-	glm::mat4 P = glm::perspective(pov, static_cast<float>(Height)/static_cast<float>(Width), 0.0f, 100.0f);
+	glm::mat4 P = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 100.0f);
 	glm::vec3 cam(this->cam[0], this->cam[1], this->cam[2]);
 	glm::vec3 center(this->center[0], this->center[1], this->center[2]);
 	glm::vec3 up(this->up[0], this->up[1], this->up[2]);

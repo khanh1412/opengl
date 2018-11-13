@@ -1,5 +1,5 @@
 CC=g++
-CXX_FLAGS=-std=c++11 -I./include -I./include/vendor -g
+CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g
 LIB_FLAGS= -lGL -lGLEW -lglfw
 
 lib: clean
@@ -13,9 +13,16 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Texture.o sources/Texture.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
+	rm -rf objects
+	mkdir objects
+	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
+	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
+	$(CC) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o
+	rm -rf objects
+
 
 main:
-	$(CC) $(CXX_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS)
+	$(CC) $(CXX_FLAGS) -o run main.cc ./libRenderer.so ./libEngine.so $(LIB_FLAGS)
 
 
 3d:
