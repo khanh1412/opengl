@@ -14,6 +14,9 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 
+main:
+	$(CC) $(CXX_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS)
+
 
 3d:
 	$(CC) $(CXX_FLAGS) -o run examples/3d.cc ./libRenderer.so $(LIB_FLAGS)
