@@ -30,9 +30,9 @@ class Object
 		float *positions;
 		int count;
 
-		float shift[3];
-		float rotate[3];
-		float scale[3];
+		float Shift[3];
+		float Rotate[3];
+		float Scale[3];
 		
 		virtual int getPositions(float*& positions)=0;
 		virtual int getIndices(float *cam, unsigned int*& indices)=0;
@@ -51,6 +51,9 @@ class Object
 		void setShift(float x, float y, float z);
 		void setRotate(float x, float y, float z);
 		void setScale(float x, float y, float z);
+		void shift(float x, float y, float z);
+		void rotate(float x, float y, float z);
+		void scale(float x, float y, float z);
 		float *getShift();
 		float *getRotate();
 		float *getScale();

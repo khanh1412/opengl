@@ -105,13 +105,7 @@ void Engine::draw(Object *obj)
 	float *scale = obj->getScale();
 
 
-
 	Shader *s = obj->getShader();
-	VertexArray *va = obj->getVertexArray();
-	IndexBuffer *ib = obj->getIndexBuffer(cam);
-	Texture *t = obj->getTexture();
-
-
 	glm::mat4 Model(1.0f), View, Projection;
 
 	Projection = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
@@ -128,6 +122,21 @@ void Engine::draw(Object *obj)
 	s->SetUniformMat4f("u_Projection", Projection);
 	s->SetUniformMat4f("u_View", View);
 	s->SetUniformMat4f("u_Model", Model);
+	/*
+	glm::vec4 v(cam[0], cam[1], cam[2], 1.0f);
+	v = Projection*View*Model*v;
+
+	float obj_cam[3] = {v[0]/v[3], v[1]/v[3], v[2]/v[3]};
+	*/
+	float *obj_cam = cam;
+
+
+	VertexArray *va = obj->getVertexArray();
+	IndexBuffer *ib = obj->getIndexBuffer(&(obj_cam[0]));
+
+	Texture *t = obj->getTexture();
+
+
 	
 	renderer->Draw(*va, *ib, *s);
 	delete ib;
