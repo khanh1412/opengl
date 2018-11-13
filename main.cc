@@ -17,8 +17,8 @@ int main()
 	Engine E(640, 480, "world");
 
 	Object *R = new Rectangle(-1, -1, 0, -1, 1, 0, 1, -1, 0);
-	Object *S = new Sphere(0, 0, 0, 0.5);
-	S->setTexture("./resources/textures/a.png");
+	Object *S = new Sphere(0, 0, 0, 0.5, 0.785);
+	//S->setTexture("./resources/textures/a.png");
 	
 	Object *C = new Cylinder(0, 1, 0, 0, -1, 0, 0.5, 0.785);
 	//C->setTexture("./resources/textures/a.png");
@@ -41,8 +41,8 @@ int main()
 		E.setPov(1.0);
 
 		//E.draw(R);
-		//E.draw(S);
-		E.draw(C);
+		E.draw(S);
+		//E.draw(C);
 		E.swapBuffers();
 		E.pollEvents();
 
