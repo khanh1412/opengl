@@ -18,6 +18,7 @@ VertexArray *Object::getVertexArray()
 {
 	if (va==nullptr)
 	{
+		va = new VertexArray();
 		count = getPositions(positions);
 		vb = new VertexBuffer(positions, count*sizeof(float));
 		layout = new VertexBufferLayout();

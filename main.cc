@@ -102,7 +102,7 @@ int Sphere::getIndices(float *cam, unsigned int*& indices)
 
 int main()
 {
-	Sphere S(1.0f, 0.01f);
+	Sphere S(1.0f, 0.1f);
 	Engine E(640, 480, "world");
 	while (!E.isClosed())
 	{
