@@ -25,6 +25,7 @@ float pi = 3.1415926535897932384626433832795028841971693993751058209749445923078
 class Sphere
 {
 	private:
+		float r;
 		int n;
 		int count;
 		float *positions;
@@ -33,7 +34,7 @@ class Sphere
 		unsigned int *indices;
 	public:
 		Sphere(float r = 1.0f, float d = 0.001f)
-			: indices(new unsigned int[1])
+			: r(r), indices(new unsigned int[1])
 		{
 
 
@@ -117,7 +118,7 @@ class Sphere
 					center[2] = (positions[5*bl+2] + positions[5*tr+2])/2;
 
 					float vec_mul = cam_pos[0]*center[0] + cam_pos[1]*center[1] + cam_pos[2]*center[2];
-					if (vec_mul > 0.9f*std::sqrt(cam_pos[0]*cam_pos[0] + cam_pos[1]*cam_pos[1] + cam_pos[2]*cam_pos[2])/1.5f)
+					if (vec_mul > r*r)
 
 					{
 						out_vec.push_back(bl);
