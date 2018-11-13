@@ -6,6 +6,10 @@ This repository holds the code of OpenGL API abstraction with CUDA integration w
 
 https://youtu.be/G___d39DK1g
 
+# Requirement
+
+
+
 # Tested
 
 - Nvidia GPU + Windows 10
@@ -14,4 +18,4 @@ https://youtu.be/G___d39DK1g
 
 - AMD GPU + Fedora 29
 
-- Intel GPU + Fedora 29 : doesnot work
+- Intel GPU + Fedora 29 : does not work, version problem!
