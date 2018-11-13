@@ -99,12 +99,13 @@ int Sphere::getIndices(float *cam, unsigned int*& indices)
 
 
 
-
+#include<iostream>
 int main()
 {
 	Sphere S(1.0f, 0.1f);
 	Engine E(640, 480, "world");
-	while (!E.isClosed())
+	//while (!E.isClosed())
+	for (int i=0; i<1000; i++)
 	{
 		E.clear();
 		E.setCam(0, 0, 1);
@@ -113,6 +114,9 @@ int main()
 		E.setPov(0.7);
 
 		E.draw(&S);
+		E.swapBuffers();
+		E.waitEvents();
+		std::cout<<".";
 	}
 
 }

@@ -43,7 +43,7 @@ Shader *Object::getShader()
 {
 	if (s==nullptr)
 	{
-		std::cout<<"Using default shader!\n"<<std::endl;
+		std::cout<<"Using default shader and texture!\n"<<std::endl;
 		s = new Shader("./resources/shaders/math.shader");
 		this->setTexture("./resources/textures/world.png");
 
@@ -59,4 +59,5 @@ void Object::setTexture(const std::string &path)
 	}
 	s->Bind();
 	t = new Texture(path.c_str());
+	t->Bind();
 }

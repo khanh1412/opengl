@@ -117,6 +117,5 @@ void Engine::draw(Object *obj)
 	s->SetUniformMat4f("u_MVP", MVP);
 
 	renderer->Draw(*va, *ib, *s);
-	std::cout<<"draw!\n";
 }
 
