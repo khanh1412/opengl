@@ -20,7 +20,7 @@ int main()
 	Object *S = new Sphere(0, 0, 0, 0.5);
 	S->setTexture("./resources/textures/a.png");
 	
-	Object *C = new Cylinder(0, -1, 0, 0, 1, 0, 0.5);
+	Object *C = new Cylinder(0, 1, 0, 0, -1, 0, 0.5);
 	//C->setTexture("./resources/textures/a.png");
 
 

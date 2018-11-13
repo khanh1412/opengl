@@ -15,24 +15,25 @@ Cylinder::~Cylinder()
 {}
 int Cylinder::getPositions(float*& positions)
 {
+	float pos[3] = {pos2[0]-pos1[0], pos2[1]-pos1[1], pos2[2]-pos1[2]};
 	//find e1 (e1*(pos2 - pos1) == 0)
 	if (pos2[2] != pos1[2])
 	{
 		e1[0] = 1;
 		e1[1] = 1;
-		e1[2] = -(e1[0]*(pos2[0]-pos1[0]) + e1[1]*(pos2[1]-pos1[1]))/(pos2[2]-pos1[2]);
+		e1[2] = -(e1[0]*pos[0] + e1[1]*pos[1])/pos[2];
 	}
 	else if (pos2[1] != pos1[1])
 	{
 		e1[0] = 1;
 		e1[2] = 1;
-		e1[1] = -(e1[0]*(pos2[0]-pos1[0]) + e1[2]*(pos2[2]-pos1[2]))/(pos2[1]-pos1[1]);	
+		e1[1] = -(e1[0]*pos[0] + e1[2]*pos[2])/pos[1];	
 	}
 	else
 	{
 		e1[1] = 1;
 		e1[2] = 1;
-		e1[0] = -(e1[1]*(pos2[1]-pos1[1]) + e1[2]*(pos2[2]-pos1[2]))/(pos2[0]-pos1[0]);	
+		e1[0] = -(e1[1]*pos[1] + e1[2]*pos[2])/pos[0];	
 	
 	}
 	{
@@ -42,15 +43,34 @@ int Cylinder::getPositions(float*& positions)
 	e1[2] = e1[2]/k;
 	}
 	//find e2 (e2*e1 == 0, e2*(pos2-pos1) == 0)
-	
-	e2[0]=1;
-	float determinant = e1[1]*(pos2[2]-pos1[2]) - e1[2]*(pos2[1]-pos1[1]);
-	float dy = (-e1[0]*(pos2[2]-pos1[2])) - (e1[2]*(-1)*(pos2[0]-pos1[0]));
-	float dz = (e1[1]*(-1)*(pos2[0]-pos1[0])) - (-e1[0]*(pos2[2]-pos1[2]));
-
-	e2[1] = dy/determinant;
-	e2[2] = dz/determinant;
-
+	float d, dx, dy, dz;
+	if (e1[1]*pos[2] - e1[2]*pos[1] != 0)
+	{
+		d = e1[1]*pos[2] - e1[2]*pos[1];
+		dy = -e1[0]*pos[2] + e1[2]*pos[0];
+		dz = -e1[1]*pos[0] + e1[0]*pos[1];
+		e2[0] = 1;
+		e2[1] = dy/d;
+		e2[2] = dz/d;
+	}
+	else if (e1[0]*pos[1] - e1[1]*pos[0] != 0)
+	{
+		d = e1[0]*pos[1] - e1[1]*pos[0];
+		dx = -e1[2]*pos[1] + e1[1]*pos[2];
+		dy = -e1[0]*pos[2] + e1[2]*pos[0];
+		e2[0] = dx/d;
+		e2[1] = dy/d;
+		e2[2] = 1;
+	}
+	else
+	{
+		d = e1[0]*pos[2] - e1[2]*pos[0];
+		dx = -e1[1]*pos[2] + e1[2]*pos[1];
+		dz = -e1[0]*pos[1] + e1[1]*pos[0];
+		e2[0] = dx/d;
+		e2[1] = 1;
+		e2[2] = dz/d;
+	}
 	
 	{
 	float k = std::sqrt(e2[0]*e2[0] + e2[1]*e2[1] + e2[2]*e2[2]);
@@ -59,15 +79,8 @@ int Cylinder::getPositions(float*& positions)
 	e2[2] = e2[2]/k;
 	}
 
-	std::cout<<e1[0]<<" "<<e1[1]<<" "<<e1[2]<<std::endl;
-	std::cout<<e2[0]<<" "<<e2[1]<<" "<<e2[2]<<std::endl;
-
-	std::cout<<pos2[0]-pos1[0]<<" "<<pos2[1]-pos1[1]<<" "<<pos2[2]-pos1[2]<<std::endl;
-
-	//__builtin_trap();
-
-
-
+	std::cout<<"e1 = ("<<e1[0]<<", "<<e1[1]<<", "<<e1[2]<<")"<<std::endl;
+	std::cout<<"e2 = ("<<e2[0]<<", "<<e2[1]<<", "<<e2[2]<<")"<<std::endl;
 
 
 	//
@@ -86,9 +99,9 @@ int Cylinder::getPositions(float*& positions)
 	{
 		float alpha = static_cast<float>(i)*2*pi/nr;
 
-                float x = r*std::cos(alpha)*e1[0] + r*std::sin(alpha)*e2[0];
-                float y = r*std::cos(alpha)*e1[1] + r*std::sin(alpha)*e2[1];
-                float z = r*std::cos(alpha)*e1[2] + r*std::sin(alpha)*e2[2];
+                float x = r*(std::cos(alpha)*e1[0] + std::sin(alpha)*e2[0]);
+                float y = r*(std::cos(alpha)*e1[1] + std::sin(alpha)*e2[1]);
+                float z = r*(std::cos(alpha)*e1[2] + std::sin(alpha)*e2[2]);
 
 
 		x1 = pos1[0] + x;
@@ -96,6 +109,7 @@ int Cylinder::getPositions(float*& positions)
 		z1 = pos1[2] + z;
 
 		texCoordx1 = static_cast<float>(i)/nr;
+		std::cout<< x*x + y*y + z*z <<std::endl;
 		texCoordy1 = 1;
 
 		x2 = pos2[0] + x;
