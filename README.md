@@ -1,8 +1,8 @@
 # opengl
 
-cross platform opengl_with_glfw_and_glew
+cross platform opengl
 
-This repository holds the code of OpenGL API abstraction written in C++
+This repository holds the code of OpenGL API abstraction with CUDA integration written in C++
 
 https://youtu.be/G___d39DK1g
 
