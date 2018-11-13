@@ -17,6 +17,8 @@ lib: clean
 
 3d:
 	$(CC) $(CXX_FLAGS) -o run examples/3d.cc ./libRenderer.so $(LIB_FLAGS)
+world:
+	$(CC) $(CXX_FLAGS) -o run examples/world.cc ./libRenderer.so $(LIB_FLAGS)
 
 clean:
 	rm -rf objects
