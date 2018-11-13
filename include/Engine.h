@@ -15,24 +15,63 @@
 #include"glm/glm.hpp"
 #include"glm/gtc/matrix_transform.hpp"
 
+#include<string>
+
 class Object
 {
-	private:
+	protected:
+		VertexArray *va;
+		VertexBuffer *vb;
+		VertexBufferLayout *layout;
+		IndexBuffer *ib;
+		Shader *s;
+		Texture *t;
+
+		float *positions;
 		int count;
-		float *position;
-		int count_indices;
-		unsigned int *indices;
+		
+		virtual int getPositions(float*& positions)=0;
+		virtual int getIndices(float *cam, unsigned int*& indices)=0;
+
 	public:
 		Object();
-		virtual ~Objects();
-		int getCount();
-		int getCountIndices();
-		float *getPositions();
-		float *getIndices();
+		~Object();
+		VertexArray *getVertexArray();
+		IndexBuffer *getIndexBuffer(float *cam);
 
-		virtual void genIndices(float *cam)=0;
+		void setShader(const std::string &path);
+		Shader *getShader();
+		void setTexture(const std::string &path);
 
 };
+class Engine
+{
+	private:
+		Renderer *renderer;
+		GLFWwindow *window;
+		int Width, Height;
+		std::string *name;
 
+		float *cam;
+		float *center;
+		float *up;
+		float pov;
+
+	public:
+		Engine();
+		Engine(int Width, int Height, const std::string &name);
+		~Engine();
+		bool isClosed();
+		void clear();
+		void swapBuffers();
+		void waitEvents();
+		void pollEvents();
+
+		void draw(Object *obj);
+		void setCam(float x, float y, float z);
+		void setCenter(float x, float y, float z);
+		void setUp(float x, float y, float z);
+		void setPov(float a);
+};
 
 #endif
