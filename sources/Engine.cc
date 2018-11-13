@@ -124,12 +124,13 @@ void Engine::draw(Object *obj)
 	Model = glm::rotate(Model, rotate[2], glm::vec3(0.0f, 0.0f, 1.0f));
 	Model = glm::scale(Model, glm::vec3(scale[0], scale[1], scale[2]));
 
-
-
+	/*	
 	s->SetUniformMat4f("u_Projection", Projection);
 	s->SetUniformMat4f("u_View", View);
 	s->SetUniformMat4f("u_Model", Model);
-
+	*/
+	glm::mat4 MVP = Projection*View*Model;
+	s->SetUniformMat4f("u_MVP", MVP);
 	renderer->Draw(*va, *ib, *s);
 	delete ib;
 }
