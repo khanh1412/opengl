@@ -1,3 +1,5 @@
+#ifndef _SPHERE_H_
+#define _SPHERE_H_
 #include"Engine.h"
 class Sphere: public Object
 {
@@ -15,3 +17,4 @@ class Sphere: public Object
 		Sphere(float x=0.0f, float y=0.0f, float z=0.0f, float r=1.0f, float d=0.01f);
 		~Sphere();
 };
+#endif

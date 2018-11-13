@@ -1,6 +1,7 @@
 #include"Engine.h"
 #include"Sphere.h"
 #include"Rectangle.h"
+#include"Cylinder.h"
 #include<iostream>
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -16,6 +17,7 @@ int main()
 
 	Object *S = new Sphere(0.5, 0.5, 0.5);
 	Object *R = new Rectangle(1, 0, 1, -1, 0, 1, 1, 1, 0);
+	Object *C = new Cylinder(1, -1, -1, -1, 1, 1, 0.3);
 	R->setTexture("./resources/textures/a.png");
 	while (!E.isClosed())
 	{
@@ -27,6 +29,7 @@ int main()
 
 		E.draw(R);
 		E.draw(S);
+		E.draw(C);
 		E.swapBuffers();
 		E.pollEvents();
 
