@@ -10,7 +10,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main()
 {
-	Object *S = new Sphere();
+	Object *S = new Sphere(0.5, 0.5, 0.5);
 	Engine E(640, 480, "world");
 	while (!E.isClosed())
 	{

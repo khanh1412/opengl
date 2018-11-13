@@ -25,9 +25,9 @@ int Sphere::getPositions(float*& positions)
 	{
 		float alpha = static_cast<float>(a)*pi/(2*n);
 		float beta = static_cast<float>(b)*pi/(2*n);
-		y = r*std::sin(beta);
-		x = r*std::cos(beta)*std::sin(alpha);
-		z = r*std::cos(beta)*std::cos(alpha);
+		y = pos[0] + r*std::sin(beta);
+		x = pos[1] + r*std::cos(beta)*std::sin(alpha);
+		z = pos[2] + r*std::cos(beta)*std::cos(alpha);
 
 		texCoord1 = static_cast<float>(a)/(4*n);
 		texCoord2 = 0.5f * (1.0f + static_cast<float>(b)/(n));
@@ -44,8 +44,15 @@ int Sphere::getPositions(float*& positions)
 	return count;
 }
 
-int Sphere::getIndices(float *cam, unsigned int*& indices)
+int Sphere::getIndices(float *cam_pos, unsigned int*& indices)
 {
+			float cam[3];
+			cam[0] = cam_pos[0] - pos[0];
+			cam[1] = cam_pos[1] - pos[1];
+			cam[2] = cam_pos[2] - pos[2];
+
+
+
 			float center[3];
 
 			std::vector<int> out_vec;
