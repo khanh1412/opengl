@@ -1,9 +1,5 @@
 #include"Engine.h"
 #include<iostream>
-Engine::Engine()
-	: Engine(640, 480, "hello world")
-{}
-
 Engine::Engine(int Width, int Height, const std::string &name)
 	: Width(Width), Height(Height), name(new std::string(name)), renderer(new Renderer()), cam(nullptr), center(nullptr), up(nullptr), pov(0)
 {

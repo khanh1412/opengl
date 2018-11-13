@@ -1,4 +1,13 @@
 #include"Sphere.h"
+Sphere::Sphere(float x, float y, float z, float r, float d)
+	: r(r), d(d)
+{
+	pos[0] = x;
+	pos[1] = y;
+	pos[2] = z;
+}
+Sphere::~Sphere()
+{}
 int Sphere::getPositions(float*& positions)
 {
 	float texCoord1, texCoord2;

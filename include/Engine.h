@@ -58,7 +58,6 @@ class Engine
 		float pov;
 
 	public:
-		Engine();
 		Engine(int Width, int Height, const std::string &name);
 		~Engine();
 		bool isClosed();
