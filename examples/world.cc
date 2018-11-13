@@ -266,17 +266,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		}
 		if (key == GLFW_KEY_LEFT) 
 		{
-			std::cout<<"GLFW_KEY_RIGHT"<<std::endl;
+			std::cout<<"GLFW_KEY_LEFT"<<std::endl;
 			alpha -= 0.01;
 		}
 		if (key == GLFW_KEY_UP) 
 		{
-			std::cout<<"GLFW_KEY_RIGHT"<<std::endl;
+			std::cout<<"GLFW_KEY_UP"<<std::endl;
 			beta += 0.01;
 		}
 		if (key == GLFW_KEY_DOWN) 
 		{
-			std::cout<<"GLFW_KEY_RIGHT"<<std::endl;
+			std::cout<<"GLFW_KEY_DOWN"<<std::endl;
 			beta -= 0.01;
 		}
 	}
