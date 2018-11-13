@@ -13,3 +13,5 @@ https://youtu.be/G___d39DK1g
 - Nvidia GPU + Fedora 29
 
 - AMD GPU + Fedora 29
+
+- Intel GPU + Fedora 29 : doesnot work
