@@ -123,3 +123,7 @@ void Engine::draw(Object *obj)
 	renderer->Draw(*va, *ib, *s);
 }
 
+GLFWwindow *Engine::getWindow()
+{
+	return window;
+}

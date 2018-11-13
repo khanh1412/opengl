@@ -72,6 +72,8 @@ class Engine
 		void setCenter(float x, float y, float z);
 		void setUp(float x, float y, float z);
 		void setPov(float a);
+
+		GLFWwindow *getWindow();
 };
 
 #endif

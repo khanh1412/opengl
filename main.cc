@@ -1,6 +1,13 @@
 #include"Engine.h"
 #include"Sphere.h"
 #include<iostream>
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (action == GLFW_PRESS or action == GLFW_REPEAT)
+	{
+	}
+}
+
 int main()
 {
 	Sphere S(1.0f, 0.1f);
@@ -16,6 +23,8 @@ int main()
 		E.draw(&S);
 		E.swapBuffers();
 		E.pollEvents();
+
+		glfwSetKeyCallback(E.getWindow(), key_callback);
 	}
 
 }
