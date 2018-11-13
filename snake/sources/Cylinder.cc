@@ -16,9 +16,25 @@ Cylinder::~Cylinder()
 int Cylinder::getPositions(float*& positions)
 {
 	//find e1 (e1*(pos2 - pos1) == 0)
-	e1[0] = 1;
-	e1[1] = 1;
-	e1[2] = -(e1[0]*(pos2[0]-pos1[0]) + e1[1]*(pos2[1]-pos1[1]))/(pos2[2]-pos1[2]);
+	if (pos2[2] != pos1[2])
+	{
+		e1[0] = 1;
+		e1[1] = 1;
+		e1[2] = -(e1[0]*(pos2[0]-pos1[0]) + e1[1]*(pos2[1]-pos1[1]))/(pos2[2]-pos1[2]);
+	}
+	else if (pos2[1] != pos1[1])
+	{
+		e1[0] = 1;
+		e1[2] = 1;
+		e1[1] = -(e1[0]*(pos2[0]-pos1[0]) + e1[2]*(pos2[2]-pos1[2]))/(pos2[1]-pos1[1]);	
+	}
+	else
+	{
+		e1[1] = 1;
+		e1[2] = 1;
+		e1[0] = -(e1[1]*(pos2[1]-pos1[1]) + e1[2]*(pos2[2]-pos1[2]))/(pos2[0]-pos1[0]);	
+	
+	}
 	{
 	float k = std::sqrt(e1[0]*e1[0] + e1[1]*e1[1] + e1[2]*e1[2]);
 	e1[0] = e1[0]/k;

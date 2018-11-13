@@ -104,7 +104,7 @@ void Engine::draw(Object *obj)
 	IndexBuffer *ib = obj->getIndexBuffer(cam);
 	Texture *t = obj->getTexture();
 
-	glm::mat4 P = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 100.0f);
+	glm::mat4 P = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
 	glm::vec3 cam(this->cam[0], this->cam[1], this->cam[2]);
 	glm::vec3 center(this->center[0], this->center[1], this->center[2]);
 	glm::vec3 up(this->up[0], this->up[1], this->up[2]);
