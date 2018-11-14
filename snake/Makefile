@@ -8,8 +8,12 @@ lib: clean copy
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Rectangle.o sources/Rectangle.cc
-	$(CC) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o ./libRenderer.so $(LIB_FLAGS)
+	$(CC) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o ./libRenderer.so
 	rm -rf objects
+
+main: lib
+	$(CC) $(CXX_FLAGS) -o run ./main.cc ./libEngine.so ./libRenderer.so $(LIB_FLAGS)
+
 copy:
 	cp ../libRenderer.so .
 clean:

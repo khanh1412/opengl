@@ -25,6 +25,9 @@ void Object::genShader(const std::string& path)
 }
 void Object::genTexture(const std::string& path)
 {
+	if (s == nullptr)
+		genShader("./resources/shaders/math.shader");
+
 	if (t) delete t;
 	s->Bind();
 	t = new Texture(path);
