@@ -26,8 +26,8 @@ int main()
 		E.clear();
 			
 
-		E.setCam(0, 10, 20);
-		E.setCenter(0, 1, 0);
+		E.setCam(0, 0, 20);
+		E.setCenter(0, 0, 0);
 		E.setUp(0,1,0);
 		E.setPov(1.0);
 		E.draw(grass);
