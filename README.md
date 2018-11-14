@@ -6,6 +6,8 @@ This repository holds the code of OpenGL API abstraction with CUDA integration w
 
 https://youtu.be/G___d39DK1g
 
+http://developer.download.nvidia.com/compute/cuda/2_3/toolkit/docs/online/group__CUDART__OPENGL.html
+
 # Requirement
 
 
