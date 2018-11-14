@@ -35,7 +35,7 @@ int main()
 	Engine E(640, 480, "world");
 
 	grass = new Rectangle(-20, 0, 20, -20, 0, -20, 20, 0, 20);
-	grass->setTexture("./snake/resources/textures/grass.png");
+	grass->setTexture("./resources/textures/grass.png");
 	ball = new Sphere(0, 1, 0, 10, 0.1);
 	ball->setTexture("./resources/textures/world.png");
 	
