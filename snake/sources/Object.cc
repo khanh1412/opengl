@@ -1,18 +1,10 @@
 #include"Engine.h"
 #include<iostream>
 Object::Object(bool vb_dynamic, bool ib_dynamic)
-	: va(nullptr), vb(nullptr), layout(nullptr), ib(nullptr), s(nullptr), t(nullptr), vb_dynamic(vb_dynamic), ib_dynamic(ib_dynamic)
-{
-	Shift[0] = 0;
-	Shift[1] = 0;
-	Shift[2] = 0;
-	Rotate[0] = 0;
-	Rotate[1] = 0;
-	Rotate[2] = 0;
-	Scale[0] = 1;
-	Scale[1] = 1;
-	Scale[2] = 1;
-}
+	: va(nullptr), vb(nullptr), layout(nullptr), ib(nullptr), s(nullptr), t(nullptr),
+	Shift({0,0,0}), Rotate({0,0,0}), Scale({1,1,1}),
+	vb_dynamic(vb_dynamic), ib_dynamic(ib_dynamic)
+{}
 Object::~Object()
 {
 	delete va;
@@ -78,58 +70,46 @@ Shader *Object::getShader()
 {
 	if (s == nullptr)
 	{
-		genShader(default_shader_path);
-		genTexture(default_texture_path);	
+		genShader("./resources/shaders/math.shader");
+		genTexture("./resources/textures/a.png");	
 	}
 	return s;
 }
 
 void Object::setShift(float x, float y, float z)
 {
-	Shift[0] = x;
-	Shift[1] = y;
-	Shift[2] = z;
+	Shift = {x, y, z};
 }
 void Object::setRotate(float x, float y, float z)
 {
-	Rotate[0] = x;
-	Rotate[1] = y;
-	Rotate[2] = z;
+	Rotate = {x, y, z};
 }
 void Object::setScale(float x, float y, float z)
 {
-	Scale[0] = x;
-	Scale[1] = y;
-	Scale[2] = z;
+	Scale = {x, y, z};
 }
 void Object::shift(float x, float y, float z)
 {
-	Shift[0] += x;
-	Shift[1] += y;
-	Shift[2] += z;
+	Shift += glm::vec3({x, y, z});
 }
 void Object::rotate(float x, float y, float z)
 {
-	Rotate[0] += x;
-	Rotate[1] += y;
-	Rotate[2] += z;
+	Rotate += glm::vec3({x, y, z});
 }
 void Object::scale(float x, float y, float z)
 {
-	Scale[0] += x;
-	Scale[1] += y;
-	Scale[2] += z;
+	Scale += glm::vec3({x, y, z});
 }
-float *Object::getShift()
+glm::vec3& Object::getShift()
 {
-	return &(Shift[0]);
+	return Shift;
 }
-float *Object::getRotate()
+glm::vec3& Object::getRotate()
 {
-	return &(Rotate[0]);
+	return Rotate;
 }
-float *Object::getScale()
+glm::vec3& Object::getScale()
 {
-	return &(Scale[0]);
+	return Scale;
 }
 

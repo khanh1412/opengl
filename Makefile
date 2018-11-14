@@ -24,4 +24,4 @@ world:
 clean:
 	rm -rf objects
 	rm -f run
-	rm -f libRenderer.so
+	rm -f *.so

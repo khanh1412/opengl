@@ -1,7 +1,7 @@
 #include"Engine.h"
 #include<iostream>
-Engine::Engine(int Width, int Height, const std::string &name)
-	: Width(Width), Height(Height), name(new std::string(name)), renderer(new Renderer()), cam(nullptr), center(nullptr), up(nullptr), pov(0)
+Engine::Engine(int Width, int Height, const std::string& name)
+	: Width(Width), Height(Height), name(name), pov(0)
 {
 	if (!glfwInit())
 	{
@@ -41,8 +41,6 @@ Engine::Engine(int Width, int Height, const std::string &name)
 }
 Engine::~Engine()
 {
-	delete renderer;
-	delete name;
 	glfwTerminate();
 }
 
@@ -53,7 +51,7 @@ bool Engine::isClosed()
 
 void Engine::clear()
 {
-	renderer->Clear();
+	renderer.Clear();
 }
 void Engine::swapBuffers()
 {
@@ -70,27 +68,15 @@ void Engine::pollEvents()
 
 void Engine::setCam(float x, float y, float z)
 {
-	if (cam==nullptr)
-		cam = new float[3];
-	cam[0] = x;
-	cam[1] = y;
-	cam[2] = z;
+	cam = {x, y, z};
 }
 void Engine::setCenter(float x, float y, float z)
 {
-	if (center==nullptr)
-		center = new float[3];
-	center[0] = x;
-	center[1] = y;
-	center[2] = z;
+	center = {x, y, z};
 }
 void Engine::setUp(float x, float y, float z)
 {
-	if (up==nullptr)
-		up = new float[3];
-	up[0] = x;
-	up[1] = y;
-	up[2] = z;
+	up = {x, y, z};
 }
 void Engine::setPov(float a)
 {
@@ -99,56 +85,24 @@ void Engine::setPov(float a)
 
 void Engine::draw(Object *obj)
 {
+	auto va		= obj->getVertexArray();			va->Bind();
+	auto ib		= obj->getIndexBuffer(glm::value_ptr(cam));	ib->Bind();
+	auto shader	= obj->getShader();				shader->Bind();
 
-	float *shift = obj->getShift();
-	float *rotate = obj->getRotate();
-	float *scale = obj->getScale();
+	glm::mat4 Proj, View, Model(1.0f);
+	Proj = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
+	View = glm::lookAt(cam, center, up);
+	Model = glm::translate(Model, obj->getShift());
+	Model = glm::rotate(Model, obj->getRotate()[0], glm::vec3(1.0f, 0.0f, 0.0f));
+	Model = glm::rotate(Model, obj->getRotate()[1], glm::vec3(0.0f, 1.0f, 0.0f));
+	Model = glm::rotate(Model, obj->getRotate()[2], glm::vec3(0.0f, 0.0f, 1.0f));
+	Model = glm::scale(Model, obj->getScale());
 
+	glm::mat4 MVP = Proj * View * Model;
 
-	Shader *s = obj->getShader();
-	glm::mat4 Model(1.0f), View, Projection;
+	shader->SetUniformMat4f("u_MVP", MVP);
 
-	Projection = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
-
-	View = glm::lookAt(glm::vec3(cam[0], cam[1], cam[2]), glm::vec3(center[0], center[1], center[2]), glm::vec3(up[0], up[1], up[2]));
-
-	Model = glm::translate(Model, glm::vec3(shift[0], shift[1], shift[2]));
-	Model = glm::rotate(Model, rotate[0], glm::vec3(1.0f, 0.0f, 0.0f));
-	Model = glm::rotate(Model, rotate[1], glm::vec3(0.0f, 1.0f, 0.0f));
-	Model = glm::rotate(Model, rotate[2], glm::vec3(0.0f, 0.0f, 1.0f));
-	Model = glm::scale(Model, glm::vec3(scale[0], scale[1], scale[2]));
-
-
-	glm::mat4 MVP = Projection * View * Model;
-
-	s->SetUniformMat4f("u_MVP", MVP);
-	/*
-	glm::vec4 v(cam[0], cam[1], cam[2], 1.0f);
-	glm::mat4 Model1(1.0f);
-	Model1 = glm::translate(Model1, glm::vec3(-shift[0], -shift[1], -shift[2]));
-	Model1 = glm::rotate(Model1, -rotate[0], glm::vec3(1.0f, 0.0f, 0.0f));
-	Model1 = glm::rotate(Model1, -rotate[1], glm::vec3(0.0f, 1.0f, 0.0f));
-	Model1 = glm::rotate(Model1, -rotate[2], glm::vec3(0.0f, 0.0f, 1.0f));
-	Model1 = glm::scale(Model1, glm::vec3(-scale[0], -scale[1], -scale[2]));
-	v = Model1*v;
-
-	float *obj_cam = new float[3];
-	for (int i=0; i<3; i++) obj_cam[i] = v[i]/v[3];
-	*/
-	float *obj_cam = cam;
-
-	VertexArray *va = obj->getVertexArray();
-	IndexBuffer *ib = obj->getIndexBuffer(&(obj_cam[0]));
-
-	//delete obj_cam;
-	//std::cout<<"    cam : "<<cam[0]<<" "<<cam[1]<<" "<<cam[2]<<std::endl;
-	//std::cout<<"obj_cam : "<<obj_cam[0]<<" "<<obj_cam[1]<<" "<<obj_cam[2]<<std::endl;
-	Texture *t = obj->getTexture();
-
-
-	
-	renderer->Draw(*va, *ib, *s);
-	delete ib;
+	renderer.Draw(*va, *ib, *shader);
 }
 void Engine::draw(std::vector<Object*> *objs)
 {

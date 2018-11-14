@@ -12,8 +12,7 @@
 #include"VertexBufferLayout.h"
 #include"Texture.h"
 
-#include"glm/glm.hpp"
-#include"glm/gtc/matrix_transform.hpp"
+#include"glm/ext.hpp"
 
 #include<string>
 
@@ -35,9 +34,9 @@ class Object
 		unsigned int *indices;
 		unsigned int count;
 
-		float Shift[3];
-		float Rotate[3];
-		float Scale[3];
+		glm::vec3 Shift;
+		glm::vec3 Rotate;
+		glm::vec3 Scale;
 		
 		//gen VertexBufferLayout
 		virtual void genLayout()=0;
@@ -52,13 +51,11 @@ class Object
 		virtual void genIndices(float *cam)=0;
 
 	public:
-		static std::string default_shader_path("./resources/shaders/math.shader");
-		static std::string default_texture_path("./resources/textures/a.png");
-		Object();
+		Object(bool vb_dynamic, bool ib_dynamic);
 		~Object();
 		
 		VertexArray *getVertexArray();
-		IndexBuffer *getIndexBuffer();
+		IndexBuffer *getIndexBuffer(float *cam);
 		Shader *getShader();
 
 		void setShift(float x, float y, float z);
@@ -67,22 +64,22 @@ class Object
 		void shift(float x, float y, float z);
 		void rotate(float x, float y, float z);
 		void scale(float x, float y, float z);
-		float *getShift();
-		float *getRotate();
-		float *getScale();
+		glm::vec3& getShift();
+		glm::vec3& getRotate();
+		glm::vec3& getScale();
 
 };
 class Engine
 {
 	private:
-		Renderer *renderer;
+		Renderer renderer;
 		GLFWwindow *window;
 		int Width, Height;
-		std::string *name;
+		std::string name;
 
-		float *cam;
-		float *center;
-		float *up;
+		glm::vec3 cam;
+		glm::vec3 center;
+		glm::vec3 up;
 		float pov;
 
 	public:
