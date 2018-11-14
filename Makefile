@@ -14,10 +14,12 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
+dynamic:
+	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
 3d:
-	$(CC) $(CXX_FLAGS) -o run examples/3d.cc ./libRenderer.so $(LIB_FLAGS)
+	$(CC) $(CXX_FLAGS) -o run examples/3_3d.cc ./libRenderer.so $(LIB_FLAGS)
 world:
-	$(CC) $(CXX_FLAGS) -o run examples/world.cc ./libRenderer.so $(LIB_FLAGS)
+	$(CC) $(CXX_FLAGS) -o run examples/4_world.cc ./libRenderer.so $(LIB_FLAGS)
 
 clean:
 	rm -rf objects

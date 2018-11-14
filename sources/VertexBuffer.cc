@@ -34,7 +34,7 @@ void VertexBuffer::setData(const void *data, unsigned int size)
 		//void glBufferData(GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage);
 		//void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data);
 		Bind();
-		glBufferSubData(GL_ARRAY_BUFFER, static_cast<GLintptr>(0), size, data);
+		glBufferSubData(GL_ARRAY_BUFFER, static_cast<int>(0), size, data);
 	}
 }
 void VertexBuffer::Bind() const
