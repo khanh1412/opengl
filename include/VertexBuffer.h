@@ -16,6 +16,7 @@ class VertexBuffer
 		void setData(const void *data, unsigned int size);
 		void Bind() const;
 		void Unbind() const;
+		inline unsigned int getID() const {return m_RendererID;}
 };
 
 #endif
