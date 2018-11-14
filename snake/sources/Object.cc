@@ -1,7 +1,7 @@
 #include"Engine.h"
 #include<iostream>
-Object::Object()
-	: va(nullptr), vb(nullptr), layout(nullptr), ib(nullptr), s(nullptr), t(nullptr)
+Object::Object(bool vb_dynamic, bool ib_dynamic)
+	: va(nullptr), vb(nullptr), layout(nullptr), ib(nullptr), s(nullptr), t(nullptr), vb_dynamic(vb_dynamic), ib_dynamic(ib_dynamic)
 {
 	Shift[0] = 0;
 	Shift[1] = 0;
@@ -22,65 +22,66 @@ Object::~Object()
 	delete s;
 	delete t;
 	delete positions;
+	delete indices;
+}
+
+void Object::genShader(const std::string& path)
+{
+	if (s) delete s;
+	s = new Shader(path);
+}
+void Object::genTexture(const std::string& path)
+{
+	if (t) delete t;
+	s->Bind();
+	t = new Texture(path);
 }
 
 VertexArray *Object::getVertexArray()
 {
-	if (va==nullptr)
+	if (va == nullptr) //create VertexArray
 	{
 		va = new VertexArray();
-		count = getPositions(positions);
-		vb = new VertexBuffer(positions, count*sizeof(float));
-		layout = new VertexBufferLayout();
-		layout->Push_float(3);//default
-		layout->Push_float(2);
+		genPositions();
+		genLayout();
+		if (vb_dynamic)
+			vb = new VertexBuffer(size);
+		else
+			vb = new VertexBuffer(positions, size);
 		va->AddBuffer(*vb, *layout);
 	}
-	va->Bind();
+	if (vb_dynamic) //Refresh if dynamic
+	{
+		genPositions();
+		vb->setData(positions, size);
+	}
 	return va;
 }
 IndexBuffer *Object::getIndexBuffer(float *cam)
 {
-	unsigned int *indices;
-	int count_indices = getIndices(cam, indices);
-	auto ib = new IndexBuffer(indices, count_indices);
-	ib->Bind();
-	delete indices;
+	if (ib == nullptr) //create IndexBuffer
+	{
+		genIndices(cam);
+		if (ib_dynamic)
+			ib = new IndexBuffer(count);
+		else
+			ib = new IndexBuffer(indices, count);
+	}
+	if (ib_dynamic) //Refresh if dynamic
+	{
+		genIndices(cam);
+		ib->setData(indices, count);
+	}
 	return ib;
-}
-void Object::setShader(const std::string &name)
-{
-	s = new Shader(name);
 }
 Shader *Object::getShader()
 {
-	if (s==nullptr)
+	if (s == nullptr)
 	{
-		//std::cout<<"Using default shader and texture!\n"<<std::endl;
-		s = new Shader("./resources/shaders/math.shader");
-		this->setTexture("./resources/textures/world.png");
-
+		genShader(default_shader_path);
+		genTexture(default_texture_path);	
 	}
-	s->Bind();
 	return s;
-}
-void Object::setTexture(const std::string &path)
-{
-	if (s==nullptr)
-	{
-		//std::cout<<"Using default shader!\n"<<std::endl;
-		s = new Shader("./resources/shaders/math.shader");
-	}
-	s->Bind();
-	t = new Texture(path);
-	t->Bind();
-}
-Texture *Object::getTexture()
-{
-	if (t==nullptr)
-		this->getShader();
-	t->Bind();
-	return t;
 }
 
 void Object::setShift(float x, float y, float z)

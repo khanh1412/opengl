@@ -22,31 +22,44 @@ class Object
 	protected:
 		VertexArray *va;
 		VertexBuffer *vb;
+		bool vb_dynamic;
 		VertexBufferLayout *layout;
 		IndexBuffer *ib;
+		bool ib_dynamic;
 		Shader *s;
 		Texture *t;
 
+
 		float *positions;
-		int count;
+		unsigned int size;
+		unsigned int *indices;
+		unsigned int count;
 
 		float Shift[3];
 		float Rotate[3];
 		float Scale[3];
 		
-		virtual int getPositions(float*& positions)=0;
-		virtual int getIndices(float *cam, unsigned int*& indices)=0;
+		//gen VertexBufferLayout
+		virtual void genLayout()=0;
+	public:
+		//gen Shader
+		void genShader(const std::string& path);
+		//gen Texture
+		void genTexture(const std::string& path);
+		//gen positions and size
+		virtual void genPositions()=0;
+		//gen indices and count
+		virtual void genIndices(float *cam)=0;
 
 	public:
+		static std::string default_shader_path("./resources/shaders/math.shader");
+		static std::string default_texture_path("./resources/textures/a.png");
 		Object();
 		~Object();
+		
 		VertexArray *getVertexArray();
-		IndexBuffer *getIndexBuffer(float *cam);
-
-		void setShader(const std::string &path);
+		IndexBuffer *getIndexBuffer();
 		Shader *getShader();
-		void setTexture(const std::string &path);
-		Texture *getTexture();
 
 		void setShift(float x, float y, float z);
 		void setRotate(float x, float y, float z);
