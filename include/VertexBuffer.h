@@ -5,8 +5,8 @@ class VertexBuffer
 {
 	private:
 		unsigned int m_RendererID;
-		bool m_Dynamic;
 		unsigned int m_Size;
+		bool m_Dynamic;
 	public:
 		//size : size in bytes of data
 		VertexBuffer(const void *data, unsigned int size);
