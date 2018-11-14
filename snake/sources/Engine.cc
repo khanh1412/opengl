@@ -85,9 +85,9 @@ void Engine::setPov(float a)
 
 void Engine::draw(Object *obj)
 {
-	auto va		= obj->getVertexArray();			va->Bind();
-	auto ib		= obj->getIndexBuffer(glm::value_ptr(cam));	ib->Bind();
-	auto shader	= obj->getShader();				shader->Bind();
+	auto va		= obj->getVertexArray();	va->Bind();
+	auto ib		= obj->getIndexBuffer(cam);	ib->Bind();
+	auto shader	= obj->getShader();		shader->Bind();
 
 	glm::mat4 Proj, View, Model(1.0f);
 	Proj = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);

@@ -4,14 +4,16 @@
 class Rectangle: public Object
 {
 	private:
-		float bl[3];
-		float tl[3];
-		float br[3];
+		glm::vec3 center;
+		glm::vec3 vec1;
+		glm::vec3 vec2;
 	protected:
-		int getPositions(float*& positions);
-		int getIndices(float *cam, unsigned int*& indices);
+		void genLayout();
 	public:
-		Rectangle(float x1=0.0f, float y1=0.0f, float z1=0.0f, float x2=0.0f, float y2=0.0f, float z2=0.0f, float x3=0.0f, float y3=0.0f, float z3=0.0f);
+		void genPositions();
+		void genIndices(glm::vec3& cam);
+	public:
+		Rectangle(glm::vec3& center, glm::vec3& vec1, glm::vec3& vec2, bool vb_dynamic=false, bool ib_dynamic=false);
 		~Rectangle();
 };
 #endif

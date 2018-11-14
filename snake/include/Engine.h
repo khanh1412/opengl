@@ -28,7 +28,6 @@ class Object
 		Shader *s;
 		Texture *t;
 
-
 		float *positions;
 		unsigned int size;
 		unsigned int *indices;
@@ -41,22 +40,23 @@ class Object
 		//gen VertexBufferLayout
 		virtual void genLayout()=0;
 	public:
-		//gen Shader
-		void genShader(const std::string& path);
-		//gen Texture
-		void genTexture(const std::string& path);
 		//gen positions and size
 		virtual void genPositions()=0;
 		//gen indices and count
-		virtual void genIndices(float *cam)=0;
+		virtual void genIndices(glm::vec3& cam)=0;
 
 	public:
 		Object(bool vb_dynamic, bool ib_dynamic);
 		~Object();
 		
 		VertexArray *getVertexArray();
-		IndexBuffer *getIndexBuffer(float *cam);
+		IndexBuffer *getIndexBuffer(glm::vec3& cam);
 		Shader *getShader();
+
+		//gen Shader
+		void genShader(const std::string& path);
+		//gen Texture
+		void genTexture(const std::string& path);
 
 		void setShift(float x, float y, float z);
 		void setRotate(float x, float y, float z);

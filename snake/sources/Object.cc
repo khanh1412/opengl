@@ -3,7 +3,8 @@
 Object::Object(bool vb_dynamic, bool ib_dynamic)
 	: va(nullptr), vb(nullptr), layout(nullptr), ib(nullptr), s(nullptr), t(nullptr),
 	Shift({0,0,0}), Rotate({0,0,0}), Scale({1,1,1}),
-	vb_dynamic(vb_dynamic), ib_dynamic(ib_dynamic)
+	vb_dynamic(vb_dynamic), ib_dynamic(ib_dynamic),
+	positions(nullptr), indices(nullptr)
 {}
 Object::~Object()
 {
@@ -49,7 +50,7 @@ VertexArray *Object::getVertexArray()
 	}
 	return va;
 }
-IndexBuffer *Object::getIndexBuffer(float *cam)
+IndexBuffer *Object::getIndexBuffer(glm::vec3& cam)
 {
 	if (ib == nullptr) //create IndexBuffer
 	{

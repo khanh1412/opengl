@@ -7,6 +7,7 @@ lib: clean copy
 	mkdir objects
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
+	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Rectangle.o sources/Rectangle.cc
 	$(CC) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o ./libRenderer.so $(LIB_FLAGS)
 	rm -rf objects
 copy:
