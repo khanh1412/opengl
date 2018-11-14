@@ -40,4 +40,5 @@ void Rectangle::genIndices(glm::vec3& cam)
 	if (indices == nullptr) delete indices;
 	indices = new unsigned int[6];
 	for (int i=0; i<6; i++) indices[i] = s_indices[i];
+	count = 6;
 }

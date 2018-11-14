@@ -34,6 +34,7 @@ int main()
 
 		E.swapBuffers();
 		E.pollEvents();
+		//__builtin_trap();
 	}
 
 }

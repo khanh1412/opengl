@@ -79,6 +79,12 @@ Shader *Object::getShader()
 	}
 	return s;
 }
+Texture *Object::getTexture()
+{
+	if (t == nullptr)
+		genTexture("./resources/textures/a.png");
+	return t;
+}
 
 void Object::setShift(float x, float y, float z)
 {

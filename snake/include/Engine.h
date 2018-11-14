@@ -53,6 +53,7 @@ class Object
 		VertexArray *getVertexArray();
 		IndexBuffer *getIndexBuffer(glm::vec3& cam);
 		Shader *getShader();
+		Texture *getTexture();
 
 		//gen Shader
 		void genShader(const std::string& path);
