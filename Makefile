@@ -14,14 +14,12 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
+main: lib
 	mkdir objects
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
 	$(CC) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o
 	rm -rf objects
-
-
-main:
 	$(CC) $(CXX_FLAGS) -o run main.cc snake/sources/Sphere.cc snake/sources/Rectangle.cc snake/sources/Cylinder.cc ./libRenderer.so ./libEngine.so $(LIB_FLAGS) -I./snake/include
 
 
