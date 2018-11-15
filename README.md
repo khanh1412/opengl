@@ -16,6 +16,11 @@ https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__
 
 - `CUDA`
 
+# Included Vendor code
+
+- `GLM` : https://github.com/g-truc/glm
+
+- `stb_image` : https://github.com/nothings/stb
 
 # Features
 
