@@ -38,9 +38,12 @@ void CudaResource::Map()
 }
 void CudaResource::Unmap()
 {
-	cudaGraphicsUnmapResources(1, &resource, stream);
-	d_ptr = nullptr;
-	d_size = 0;
+	if(d_ptr)
+	{
+		cudaGraphicsUnmapResources(1, &resource, stream);
+		d_ptr = nullptr;
+		d_size = 0;
+	}
 }
 
 
