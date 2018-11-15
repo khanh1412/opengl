@@ -1,9 +1,9 @@
 CC=g++
-CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g
+CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g -I/usr/include/cuda
 LIB_FLAGS= -lGL -lGLEW -lglfw
 
 NVCC=nvcc
-CUDA_FLAGS=-I./include -I./include/vendor -I/usr/include/cuda
+CUDA_FLAGS= -ccbin cuda-g++ -I./include -I./include/vendor -I/usr/include/cuda
 
 
 
@@ -22,7 +22,8 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
 all: lib
-	$(CC) $(CUDA_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS) -lcudart -DCUDA
+	$(NVCC) $(CUDA_FLAGS) -dc -o device.o device.cu
+	$(NVCC) $(CUDA_FLAGS) -o run main.cc device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
 
 dynamic:
 	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)

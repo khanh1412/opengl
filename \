@@ -103,7 +103,6 @@ int main(void)
 
 	glm::mat4 MVP = Proj * View * Model;
 #ifdef CUDA
-	void device_set_dynamic_position(float t, float *d_arr);
 	CudaInterface CI;
 	CI.RegisterBuffer(&vb);
 	std::cout<<"registered buffer vb"<<std::endl;
