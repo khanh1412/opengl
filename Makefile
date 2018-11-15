@@ -22,7 +22,7 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
 all: lib
-	$(NVCC) $(CUDA_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS) -lcudart
+	$(NVCC) $(CUDA_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS) -lcudart -DCUDA
 
 dynamic:
 	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)

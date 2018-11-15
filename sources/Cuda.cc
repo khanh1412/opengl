@@ -1,4 +1,5 @@
 #include"Cuda.h"
+#include<iostream>
 CudaInterface::CudaInterface()
 	: resource(nullptr), count(0)
 {}
@@ -12,39 +13,54 @@ void CudaInterface::RegisterBuffer(VertexBuffer *vb)
 {
 	if (count == 0)
 	{
-		cudaGraphicsGLRegisterBuffer(resource, vb->getID(), 0);
-		count++;
+		cudaError_t e = cudaGraphicsGLRegisterBuffer(resource, vb->getID(), 0);
+		if (e == cudaSuccess)
+			count++;
+		else
+			std::cout<<"RegisterBuffer Error: "<<vb->getID()<<std::endl;
 	}
 }
 void CudaInterface::RegisterBuffer(IndexBuffer *ib)
 {
 	if (count = 0)
 	{
-		cudaGraphicsGLRegisterBuffer(resource, ib->getID(), 0);
-		count++;
+		cudaError_t e = cudaGraphicsGLRegisterBuffer(resource, ib->getID(), 0);
+		if (e == cudaSuccess)
+			count++;
+		else
+			std::cout<<"RegisterBuffer Error: "<<ib->getID()<<std::endl;
 	}
 }
 void CudaInterface::Unregister()
 {
 	if (count == 1)
 	{
-		cudaGraphicsUnregisterResource(*resource);
-		count--;
+		cudaError_t e = cudaGraphicsUnregisterResource(*resource);
+		if (e == cudaSuccess)
+			count--;
+		else
+			std::cout<<"RegisterBuffer Error: "<<std::endl;
 	}
 
 }
 
 void CudaInterface::Map()
 {
-	cudaGraphicsMapResources(count, resource);
+	cudaError_t e = cudaGraphicsMapResources(count, (cudaGraphicsResource_t*)resource);
+	if (e != cudaSuccess)
+		std::cout<<"MapBuffer Error: "<<std::endl;
 }
 void CudaInterface::Unmap()
 {
-	cudaGraphicsUnmapResources(count, resource);
+	cudaError_t e = cudaGraphicsUnmapResources(count, (cudaGraphicsResource_t*)resource);
+	if (e != cudaSuccess)
+		std::cout<<"UnmapBuffer Error: "<<std::endl;
 }
 void CudaInterface::getPointer(void **ptr, size_t *size)
 {
-	cudaGraphicsResourceGetMappedPointer(ptr, size, *resource);
+	cudaError_t e = cudaGraphicsResourceGetMappedPointer(ptr, size, *resource);
+	if (e != cudaSuccess)
+		std::cout<<"Get Pointer Buffer Error: "<<std::endl;
 }
 
 

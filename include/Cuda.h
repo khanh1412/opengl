@@ -7,7 +7,7 @@
 class CudaInterface
 {
 	private:
-		cudaGraphicsResource_t* resource;
+		cudaGraphicsResource** resource;
 		int count;
 	public:
 		CudaInterface();

@@ -10,11 +10,13 @@
 #include"Shader.h"
 #include"VertexBufferLayout.h"
 #include"Texture.h"
+#include"Cuda.h"
 
 #include"glm/glm.hpp"
 #include"glm/gtc/matrix_transform.hpp"
 #include<cmath>
 #include<ctime>
+
 
 #define HEIGHT 640
 #define WIDTH 640
@@ -100,6 +102,10 @@ int main(void)
 	glm::mat4 Model(1.0f);
 
 	glm::mat4 MVP = Proj * View * Model;
+#ifdef CUDA
+	CudaInterface CI;
+	CI.RegisterBuffer(&vb);
+#endif
 	while (!glfwWindowShouldClose(window))
 	{
 		std::clock_t t1 = std::clock();
@@ -115,22 +121,17 @@ int main(void)
 				dynamic_positions[i] = t*positions[i];
 			else
 				dynamic_positions[i] = positions[i];
-
+#ifndef CUDA
 		vb.setData((void*)&dynamic_positions[0], 20*sizeof(float));
+#else
+		CI.Map();
+		float *d_pos; size_t size;
+		CI.getPointer((void**)&d_pos, &size);
+		cudaMemcpy(d_pos, dynamic_positions, size, cudaMemcpyHostToDevice);
+		CI.Unmap();
+#endif
 		shader.Bind();
 		shader.SetUniformMat4f("u_MVP", MVP);
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 		renderer.Draw(va, ib, shader);
