@@ -26,6 +26,11 @@ lib: objects
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 
 
+normbuffer: lib
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o examples/7_normbuffer/main.o examples/7_normbuffer/main.cc
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -dc -o examples/7_normbuffer/device.o examples/7_normbuffer/device.cu
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/7_normbuffer/*.o ./libRenderer.so $(LIB_FLAGS) -lcudart
+	rm -f examples/7_normbuffer/*.o
 cuda: lib
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o examples/6_cuda/main.o examples/6_cuda/main.cc
 	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -dc -o examples/6_cuda/device.o examples/6_cuda/device.cu
