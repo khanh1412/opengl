@@ -10,7 +10,7 @@
 #include"Shader.h"
 #include"VertexBufferLayout.h"
 #include"Texture.h"
-#include"Cuda.h"
+#include"CudaResource.h"
 
 #include"glm/glm.hpp"
 #include"glm/gtc/matrix_transform.hpp"
@@ -74,14 +74,11 @@ int main(void)
 
 
 	VertexArray va;
-	VertexBuffer vb(20*sizeof(float));
-
-
-	VertexBufferLayout layout;
-	layout.Push_float(3);//2 floats of rectangle vertices
-	layout.Push_float(2);//2 floats of texture coordinates
-
-	va.AddBuffer(vb, layout);
+		VertexBuffer vb(20*sizeof(float));
+		VertexBufferLayout layout;
+		layout.Push_float(3);//2 floats of rectangle vertices
+		layout.Push_float(2);//2 floats of texture coordinates
+		va.AddBuffer(vb, layout);
 
 	IndexBuffer ib(indices, 6);
 
@@ -93,16 +90,16 @@ int main(void)
 	Texture texture("./resources/textures/world.png");
 	texture.Bind();
 
-	Renderer renderer;
 	
-
-
-
 	glm::mat4 Proj = glm::perspective(1.5708f, (float)HEIGHT / (float)WIDTH, 0.0f, 100.0f);
 	glm::mat4 View = glm::lookAt(glm::vec3(0.0f,0.0f,2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 Model(1.0f);
 
 	glm::mat4 MVP = Proj * View * Model;
+	shader.Bind();
+	shader.SetUniformMat4f("u_MVP", MVP);
+
+
 	vb.setData((void*)&positions[0], 20*sizeof(float));
 
 
@@ -110,18 +107,9 @@ int main(void)
 
 
 	void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t);
-	CudaResourceArray CRA;
-	CRA.pushBuffer(&vb);
-	float *d_arr = reinterpret_cast<float*>(CRA.getPointer(&vb));
-	size_t size = CRA.getSize(&vb);
+	CudaResource CR(&vb);
 
-	float *arr = new float[20];
-	CRA.syncStream();
-	cudaMemcpyAsync(arr, d_arr, size, cudaMemcpyDeviceToHost, CRA.getStream());
-	CRA.syncStream();
-
-	for (int i=0; i<20; i++) std::cout<<arr[i]<<" "; std::cout<<std::endl;
-
+	Renderer renderer;
 	while (!glfwWindowShouldClose(window))
 	{
 		std::clock_t t1 = std::clock();
@@ -130,19 +118,15 @@ int main(void)
 
 
 
-		vb.Bind();
-		std::cout<<t<<std::endl;
-		CRA.syncStream();
-			device_set_dynamic_position(CRA.getStream(), d_arr, t);
-		CRA.syncStream();
+
+		CR.Map();
+		device_set_dynamic_position(CR.getStream(), reinterpret_cast<float*>(CR.getPointer()), t);
+		CR.syncStream();
 		t = 1;
+		CR.Unmap();
 
 
 
-
-
-		shader.Bind();
-		shader.SetUniformMat4f("u_MVP", MVP);
 
 
 		renderer.Draw(va, ib, shader);

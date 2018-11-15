@@ -19,7 +19,7 @@ lib: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Shader.o sources/Shader.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Texture.o sources/Texture.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Cuda.o sources/Cuda.cc -I/usr/include/cuda
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaResource.o sources/CudaResource.cc -I/usr/include/cuda
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
 cuda: ./libRenderer.so
