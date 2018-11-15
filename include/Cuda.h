@@ -13,8 +13,8 @@ class CudaInterface
 	public:
 		CudaInterface();
 		~CudaInterface();
-		void RegisterBuffer(VertexBuffer *vb);
-		void RegisterBuffer(IndexBuffer *ib);
+		void RegisterBufferDefault(VertexBuffer *vb);
+		void RegisterBufferDefault(IndexBuffer *ib);
 		void Unregister();
 		void Map();
 		void Unmap();

@@ -9,11 +9,11 @@ CudaInterface::~CudaInterface()
 	Unregister();
 }
 
-void CudaInterface::RegisterBuffer(VertexBuffer *vb)
+void CudaInterface::RegisterBufferDefault(VertexBuffer *vb)
 {
 	if (count == 0)
 	{
-		cudaError_t e = cudaGraphicsGLRegisterBuffer(&resource, vb->getID(), 0);
+		cudaError_t e = cudaGraphicsGLRegisterBuffer(&resource, vb->getID(), cudaGraphicsRegisterFlagsNone);
 		if (e == cudaSuccess)
 			count++;
 		else
@@ -23,11 +23,11 @@ void CudaInterface::RegisterBuffer(VertexBuffer *vb)
 		}
 	}
 }
-void CudaInterface::RegisterBuffer(IndexBuffer *ib)
+void CudaInterface::RegisterBufferDefault(IndexBuffer *ib)
 {
 	if (count = 0)
 	{
-		cudaError_t e = cudaGraphicsGLRegisterBuffer(&resource, ib->getID(), 0);
+		cudaError_t e = cudaGraphicsGLRegisterBuffer(&resource, ib->getID(), cudaGraphicsRegisterFlagsNone);
 		if (e == cudaSuccess)
 			count++;
 		else

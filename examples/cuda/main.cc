@@ -105,7 +105,7 @@ int main(void)
 #ifdef CUDA
 	void device_set_dynamic_position(float t, float *d_arr);
 	CudaInterface CI;
-	CI.RegisterBuffer(&vb);
+	CI.RegisterBufferDefault(&vb);
 	std::cout<<"registered buffer vb"<<std::endl;
 #endif
 	while (!glfwWindowShouldClose(window))
@@ -129,7 +129,17 @@ int main(void)
 		CI.Map();
 		float *d_arr; size_t size;
 		CI.getPointer((void**)&d_arr, &size);
-		std::cout<<"main.cc : t = "<<t<<std::endl;
+		//
+		char *arr = new char[size];
+		cudaMemcpy(arr, d_arr, size, cudaMemcpyDeviceToHost);
+		for (int i=0; i<20; i++)
+			std::cout<<reinterpret_cast<float*>(arr)[i]<<" ";
+
+
+
+
+
+		//
 		device_set_dynamic_position(t, d_arr);
 		CI.Unmap();
 #endif
