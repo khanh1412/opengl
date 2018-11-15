@@ -22,12 +22,9 @@ lib: clean
 	rm -rf objects
 cuda: libRenderer.so
 	$(CC) $(CXX_FLAGS) -c -fPIC -o examples/cuda/main.o examples/cuda/main.cc -DCUDA
-	$(NVCC) $(CUDA_FLAGS) -dc -o examples/cuda/device.o examples/cuda/device.cu
+	$(NVCC) $(CUDA_FLAGS) -dc -o examples/cuda/device.o examples/cuda/device.cu -DCUDA
 	$(NVCC) $(CUDA_FLAGS) -o run examples/cuda/main.o examples/cuda/device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
 	rm -f examples/cuda/*.o
-host: libRenderer.so
-	$(CC) $(CXX_FLAGS) -o run examples/cuda/main.cc ./libRenderer.so $(LIB_FLAGS)
-
 dynamic:
 	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
 3d:

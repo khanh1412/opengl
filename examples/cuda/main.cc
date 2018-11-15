@@ -16,6 +16,7 @@
 #include"glm/gtc/matrix_transform.hpp"
 #include<cmath>
 #include<ctime>
+#include<mutex>
 
 
 #define HEIGHT 640
@@ -108,7 +109,6 @@ int main(void)
 
 
 
-#ifdef CUDA
 	void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t);
 	CudaResourceArray CRA;
 	CRA.pushBuffer(&vb);
@@ -120,17 +120,8 @@ int main(void)
 	cudaMemcpyAsync(arr, d_arr, size, cudaMemcpyDeviceToHost, CRA.getStream());
 	CRA.syncStream();
 
-	for (int i=0; i<20; i++) std::cout<<arr[i]; std::cout<<std::endl;
+	for (int i=0; i<20; i++) std::cout<<arr[i]<<" "; std::cout<<std::endl;
 
-
-
-
-
-
-
-
-
-#endif
 	while (!glfwWindowShouldClose(window))
 	{
 		/* render here */
@@ -138,20 +129,12 @@ int main(void)
 
 
 
-
 		vb.Bind();
-		float dynamic_positions[20]; for (int i=0; i<20; i++) 
-			if (i%5 == 0 or i%5 == 1 or i%5 == 2)
-				dynamic_positions[i] = t*positions[i];
-			else
-				dynamic_positions[i] = positions[i];
-#ifndef CUDA
-		vb.setData((void*)&dynamic_positions[0], 20*sizeof(float));
-#else
+		std::cout<<t<<std::endl;
 		CRA.syncStream();
 			device_set_dynamic_position(CRA.getStream(), d_arr, t);
 		CRA.syncStream();
-#endif
+		t = 1;
 
 
 
@@ -163,11 +146,14 @@ int main(void)
 
 		renderer.Draw(va, ib, shader);
 		glfwSwapBuffers(window);
+		std::cout<<"before event"<<std::endl;
 		glfwWaitEvents();
+		std::cout<<"after event"<<std::endl;
 
 		//glfwWaitEvents();
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		glfwSetKeyCallback(window, key_callback);
+		std::cout<<"after callback"<<std::endl;
 	
 	}
 	

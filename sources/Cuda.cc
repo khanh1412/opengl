@@ -10,14 +10,23 @@ CudaResourceArray::~CudaResourceArray()
 	cudaStreamDestroy(stream);
 }
 
+void CudaResourceArray::cudaRegisterBuffer(cudaGraphicsResource_t *resource, unsigned int ID)
+{
+	if (cudaSuccess != cudaGraphicsGLRegisterBuffer(resource, ID, cudaGraphicsRegisterFlagsNone))
+		__builtin_trap();	
+}
+void CudaResourceArray::cudaMapResource(cudaGraphicsResource_t *resource)
+{
+	if (cudaSuccess != cudaGraphicsMapResources(1, resource, stream))
+		__builtin_trap();	
+}
+
 void CudaResourceArray::pushBuffer(unsigned int ID, void *Buffer)
 {
 	CudaResource* element = new CudaResource();
 
-	if (cudaSuccess != cudaGraphicsGLRegisterBuffer(&(element->resource), ID, cudaGraphicsRegisterFlagsNone))
-		__builtin_trap();
-	if (cudaSuccess != cudaGraphicsMapResources(1, &(element->resource), stream))
-		__builtin_trap();
+	cudaRegisterBuffer(&(element->resource), ID);
+	cudaMapResource(&(element->resource));
 	cudaGraphicsResourceSetMapFlags(element->resource, cudaGraphicsMapFlagsNone);
 	cudaGraphicsResourceGetMappedPointer(&(element->d_ptr), &(element->size), element->resource);
 

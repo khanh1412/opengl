@@ -10,8 +10,6 @@ __global__ void set_dynamic_position(float *arr, float t)
 	{
 		arr[i] = arr[i] * t;
 	}
-	if (threadID == 0)
-		std::printf("%f\n", arr[i]);
 }
 
 void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t)

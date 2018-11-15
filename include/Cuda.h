@@ -21,6 +21,9 @@ class CudaResourceArray
 		cudaStream_t stream;
 		std::vector<CudaResource*> elements;
 
+		static void cudaRegisterBuffer(cudaGraphicsResource_t *resource, unsigned int ID);
+		void cudaMapResource(cudaGraphicsResource_t *resource);
+
 		void pushBuffer(unsigned int ID, void *Buffer = nullptr);
 		void popBuffer(std::vector<CudaResource*>::iterator it);
 		void popAll();
