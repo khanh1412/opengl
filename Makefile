@@ -1,4 +1,4 @@
-CC=g++
+CC=cuda-g++
 CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g -I/usr/include/cuda
 LIB_FLAGS= -lGL -lGLEW -lglfw -lcudart
 

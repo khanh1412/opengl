@@ -14,7 +14,7 @@ __global__ void set_dynamic_position(float t, float *arr)
 
 void device_set_dynamic_position(float t, float *d_arr)
 {
-	std::printf("device.cc : t = %d\n", t);
+	std::printf("device.cc : t = %f\n", t);
 	dim3 blocks_per_grid(4, 1, 1);
 	dim3 threads_per_block(5, 1, 1);
 
