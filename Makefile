@@ -21,9 +21,10 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
 cuda: lib
+	$(CC) $(CXX_FLAGS) -c -fPIC -o examples/cuda/main.o examples/cuda/main.cc -DCUDA
 	$(NVCC) $(CUDA_FLAGS) -dc -o examples/cuda/device.o examples/cuda/device.cu
-	$(NVCC) $(CUDA_FLAGS) -o run examples/cuda/main.cc examples/cuda/device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
-	rm -f examples/cuda/device.o
+	$(NVCC) $(CUDA_FLAGS) -o run examples/cuda/main.o examples/cuda/device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
+	rm -f examples/cuda/*.o
 host:
 	$(CC) $(CXX_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS)
 

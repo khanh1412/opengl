@@ -108,7 +108,7 @@ int main(void)
 	CI.RegisterBuffer(&vb);
 	std::cout<<"registered buffer vb"<<std::endl;
 #endif
-	//while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window))
 	{
 		std::clock_t t1 = std::clock();
 		/* render here */
@@ -129,7 +129,7 @@ int main(void)
 		CI.Map();
 		float *d_arr; size_t size;
 		CI.getPointer((void**)&d_arr, &size);
-		std::cout<<"t = "<<t<<std::endl;
+		std::cout<<"main.cc : t = "<<t<<std::endl;
 		device_set_dynamic_position(t, d_arr);
 		CI.Unmap();
 #endif
