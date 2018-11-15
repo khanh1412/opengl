@@ -2,7 +2,7 @@
 #define _CUDA_H_
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
-#include<cudaGL.h>
+#include<cuda_gl_interop.h>
 #include<cuda_runtime_api.h>
 class CudaInterface
 {

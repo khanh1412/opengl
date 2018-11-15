@@ -2,6 +2,12 @@ CC=g++
 CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g
 LIB_FLAGS= -lGL -lGLEW -lglfw
 
+NVCC=nvcc
+CUDA_FLAGS=-I./include -I./include/vendor -I/usr/include/cuda
+
+
+
+
 lib: clean
 	mkdir objects
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Renderer.o sources/Renderer.cc
@@ -12,9 +18,12 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Shader.o sources/Shader.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Texture.o sources/Texture.cc
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
-	g++ -I./include -I./include/vendor -c -fPIC -o objects/Cuda.o sources/Cuda.cc -I/usr/include/cuda
+	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Cuda.o sources/Cuda.cc -I/usr/include/cuda
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
+all: lib
+	$(NVCC) $(CUDA_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS) -lcudart
+
 dynamic:
 	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
 3d:
