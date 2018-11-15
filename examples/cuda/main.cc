@@ -118,12 +118,12 @@ int main(void)
 
 
 		vb.Bind();
-#ifndef CUDA
 		float dynamic_positions[20]; for (int i=0; i<20; i++) 
 			if (i%5 == 0 or i%5 == 1 or i%5 == 2)
 				dynamic_positions[i] = t*positions[i];
 			else
 				dynamic_positions[i] = positions[i];
+#ifndef CUDA
 		vb.setData((void*)&dynamic_positions[0], 20*sizeof(float));
 #else
 		CI.Map();
@@ -134,13 +134,9 @@ int main(void)
 		cudaMemcpy(arr, d_arr, size, cudaMemcpyDeviceToHost);
 		for (int i=0; i<20; i++)
 			std::cout<<reinterpret_cast<float*>(arr)[i]<<" ";
-
-
-
-
-
 		//
-		device_set_dynamic_position(t, d_arr);
+		//device_set_dynamic_position(t, d_arr);
+		cudaMemcpy(d_arr, dynamic_positions, size, cudaMemcpyHostToDevice);
 		CI.Unmap();
 #endif
 		shader.Bind();
