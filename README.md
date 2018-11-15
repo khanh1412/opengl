@@ -15,7 +15,7 @@ https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__
 
 - `OpenGL` : VertexArray, VertexBuffer, IndexBuffer, Shader, Texture
 
-- `CUDA`   : Buffer can be write and read by Cuda
+- `CUDA`   : Buffer can be read and written by Cuda
 
 
 # Tested
