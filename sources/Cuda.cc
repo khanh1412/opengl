@@ -12,7 +12,7 @@ void CudaInterface::RegisterBuffer(VertexBuffer *vb)
 {
 	if (count == 0)
 	{
-		cuGraphicsGLRegisterBuffer(resource, vb->getID(), 0);
+		cudaGraphicsGLRegisterBuffer(resource, vb->getID(), 0);
 		count++;
 	}
 }
@@ -20,7 +20,7 @@ void CudaInterface::RegisterBuffer(IndexBuffer *ib)
 {
 	if (count = 0)
 	{
-		cuGraphicsGLRegisterBuffer(resource, ib->getID(), 0);
+		cudaGraphicsGLRegisterBuffer(resource, ib->getID(), 0);
 		count++;
 	}
 }
