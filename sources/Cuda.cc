@@ -1,7 +1,7 @@
 #include"Cuda.h"
 #include<iostream>
 CudaInterface::CudaInterface()
-	: count(0)
+	: count(0), map(0)
 {}
 CudaInterface::~CudaInterface()
 {
@@ -56,29 +56,43 @@ void CudaInterface::Unregister()
 
 void CudaInterface::Map()
 {
-	cudaError_t e = cudaGraphicsMapResources(count, &resource);
-	if (e != cudaSuccess)
+	if (map==0)
 	{
-		std::cout<<"MapBuffer Error: "<<std::endl;
-		__builtin_trap();
+		cudaError_t e = cudaGraphicsMapResources(count, &resource);
+		if (e == cudaSuccess)
+			map++;
+		else
+		{
+			std::cout<<"MapBuffer Error: "<<std::endl;
+			__builtin_trap();
+		}
 	}
 }
 void CudaInterface::Unmap()
 {
-	cudaError_t e = cudaGraphicsUnmapResources(count, &resource);
-	if (e != cudaSuccess)
+	if (map==1)
 	{
-		std::cout<<"UnmapBuffer Error: "<<std::endl;
+		cudaError_t e = cudaGraphicsUnmapResources(count, &resource);
+		if (e == cudaSuccess)
+			map--;
+		else
+		{
+			std::cout<<"UnmapBuffer Error: "<<std::endl;
 			__builtin_trap();
+		}
+		map--;
 	}
 }
 void CudaInterface::getPointer(void **ptr, size_t *size)
 {
-	cudaError_t e = cudaGraphicsResourceGetMappedPointer(ptr, size, resource);
-	if (e != cudaSuccess)
+	if (map==1)
 	{
-		std::cout<<"Get Pointer Buffer Error: "<<std::endl;
+		cudaError_t e = cudaGraphicsResourceGetMappedPointer(ptr, size, resource);
+		if (e != cudaSuccess)
+		{
+			std::cout<<"Get Pointer Buffer Error: "<<std::endl;
 			__builtin_trap();
+		}
 	}
 }
 

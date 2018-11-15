@@ -9,6 +9,7 @@ class CudaInterface
 	private:
 		cudaGraphicsResource_t resource;
 		int count;
+		int map;
 	public:
 		CudaInterface();
 		~CudaInterface();

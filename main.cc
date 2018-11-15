@@ -105,6 +105,7 @@ int main(void)
 #ifdef CUDA
 	CudaInterface CI;
 	CI.RegisterBuffer(&vb);
+	std::cout<<"registered buffer vb"<<std::endl;
 #endif
 	while (!glfwWindowShouldClose(window))
 	{
@@ -143,7 +144,7 @@ int main(void)
 		glfwSetKeyCallback(window, key_callback);
 	
 		std::clock_t t2 = std::clock();
-		std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
+		//std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
 	}
 	
 } // detele everything before OpenGL terminate	
