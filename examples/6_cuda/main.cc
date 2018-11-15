@@ -124,6 +124,7 @@ int main(void)
 
 	while (!glfwWindowShouldClose(window))
 	{
+		std::clock_t t1 = std::clock();
 		/* render here */
 		renderer.Clear();
 
@@ -146,15 +147,13 @@ int main(void)
 
 		renderer.Draw(va, ib, shader);
 		glfwSwapBuffers(window);
-		std::cout<<"before event"<<std::endl;
-		glfwWaitEvents();
-		std::cout<<"after event"<<std::endl;
+		glfwPollEvents();
 
 		//glfwWaitEvents();
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		glfwSetKeyCallback(window, key_callback);
-		std::cout<<"after callback"<<std::endl;
-	
+		std::clock_t t2 = std::clock();
+                std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
 	}
 	
 } // detele everything before OpenGL terminate	

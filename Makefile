@@ -1,4 +1,4 @@
-CC=cuda-g++
+CC=g++
 CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g -I/usr/include/cuda
 LIB_FLAGS= -lGL -lGLEW -lglfw -lcudart
 
@@ -20,11 +20,11 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Cuda.o sources/Cuda.cc -I/usr/include/cuda
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
-cuda: libRenderer.so
-	$(CC) $(CXX_FLAGS) -c -fPIC -o examples/cuda/main.o examples/cuda/main.cc -DCUDA
-	$(NVCC) $(CUDA_FLAGS) -dc -o examples/cuda/device.o examples/cuda/device.cu -DCUDA
-	$(NVCC) $(CUDA_FLAGS) -o run examples/cuda/main.o examples/cuda/device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
-	rm -f examples/cuda/*.o
+cuda: lib
+	$(CC) $(CXX_FLAGS) -c -fPIC -o examples/6_cuda/main.o examples/6_cuda/main.cc -DCUDA
+	$(NVCC) $(CUDA_FLAGS) -dc -o examples/6_cuda/device.o examples/6_cuda/device.cu -DCUDA
+	$(NVCC) $(CUDA_FLAGS) -o run examples/6_cuda/main.o examples/6_cuda/device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
+	rm -f examples/6_cuda/*.o
 dynamic:
 	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
 3d:
