@@ -103,11 +103,12 @@ int main(void)
 
 	glm::mat4 MVP = Proj * View * Model;
 #ifdef CUDA
+	void device_set_dynamic_position(float t, float *d_arr);
 	CudaInterface CI;
 	CI.RegisterBuffer(&vb);
 	std::cout<<"registered buffer vb"<<std::endl;
 #endif
-	while (!glfwWindowShouldClose(window))
+	//while (!glfwWindowShouldClose(window))
 	{
 		std::clock_t t1 = std::clock();
 		/* render here */
@@ -128,6 +129,7 @@ int main(void)
 		CI.Map();
 		float *d_arr; size_t size;
 		CI.getPointer((void**)&d_arr, &size);
+		std::cout<<"t = "<<t<<std::endl;
 		device_set_dynamic_position(t, d_arr);
 		CI.Unmap();
 #endif
@@ -137,7 +139,7 @@ int main(void)
 
 		renderer.Draw(va, ib, shader);
 		glfwSwapBuffers(window);
-		glfwPollEvents();
+		glfwWaitEvents();
 
 		//glfwWaitEvents();
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
