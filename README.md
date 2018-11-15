@@ -8,7 +8,14 @@ https://youtu.be/G___d39DK1g
 
 https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__CUDART__OPENGL
 
-# Requirement
+# Requirements
+
+- `GLEW`
+
+- `GLFW`
+
+- `CUDA`
+
 
 # Features
 
