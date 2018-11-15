@@ -18,19 +18,15 @@ objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Shader.o sources/Shader.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Texture.o sources/Texture.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
-cuda_objects: objects
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaResource.o sources/CudaResource.cc -I/usr/include/cuda
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaResource.o sources/CudaResource.cc
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/NormBuffer.o sources/NormBuffer.cc
 
 
 lib: objects
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 
-lib_cuda: cuda_objects
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 
-
-
-cuda: lib_cuda
+cuda: lib
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o examples/6_cuda/main.o examples/6_cuda/main.cc
 	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -dc -o examples/6_cuda/device.o examples/6_cuda/device.cu
 	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/6_cuda/*.o ./libRenderer.so $(LIB_FLAGS) -lcudart

@@ -1,17 +1,15 @@
 #include"NormBuffer.h"
-
-NormBuffer::NormBuffer(const float *data, unsigned int count)
-	: h_ptr(data), d_ptr(nullptr), count(0), writable(false), count(count)
+#include<iostream>
+NormBuffer::NormBuffer(float *data, unsigned int count)
+	: h_ptr(data), count(count), writable(false)
 {}
 NormBuffer::NormBuffer(unsigned int count)
-	: h_ptr(data), d_ptr(nullptr), count(0), writable(true), count(count)
+	: h_ptr(nullptr), count(count), writable(true)
 {}
 NormBuffer::~NormBuffer()
-{
+{}
 
-}
-
-void NormBuffer::setData(const float *data, unsigned int count)
+void NormBuffer::setData(float *data, unsigned int count)
 {
 	if (not writable) return;
 	if (count > this->count)
@@ -26,4 +24,3 @@ void NormBuffer::setData(const float *data, unsigned int count)
 		h_ptr = data;
 	}
 }
-void NormBuffer::
