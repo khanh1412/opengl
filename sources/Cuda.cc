@@ -17,7 +17,10 @@ void CudaInterface::RegisterBuffer(VertexBuffer *vb)
 		if (e == cudaSuccess)
 			count++;
 		else
+		{
 			std::cout<<"RegisterBuffer Error: "<<vb->getID()<<std::endl;
+			__builtin_trap();
+		}
 	}
 }
 void CudaInterface::RegisterBuffer(IndexBuffer *ib)
@@ -28,7 +31,11 @@ void CudaInterface::RegisterBuffer(IndexBuffer *ib)
 		if (e == cudaSuccess)
 			count++;
 		else
+		{
 			std::cout<<"RegisterBuffer Error: "<<ib->getID()<<std::endl;
+			__builtin_trap();
+
+		}
 	}
 }
 void CudaInterface::Unregister()
@@ -39,7 +46,10 @@ void CudaInterface::Unregister()
 		if (e == cudaSuccess)
 			count--;
 		else
-			std::cout<<"RegisterBuffer Error: "<<std::endl;
+		{
+			std::cout<<"UnregisterBuffer Error: "<<std::endl;
+			__builtin_trap();
+		}
 	}
 
 }
@@ -48,19 +58,28 @@ void CudaInterface::Map()
 {
 	cudaError_t e = cudaGraphicsMapResources(count, (cudaGraphicsResource_t*)resource);
 	if (e != cudaSuccess)
+	{
 		std::cout<<"MapBuffer Error: "<<std::endl;
+		__builtin_trap();
+	}
 }
 void CudaInterface::Unmap()
 {
 	cudaError_t e = cudaGraphicsUnmapResources(count, (cudaGraphicsResource_t*)resource);
 	if (e != cudaSuccess)
+	{
 		std::cout<<"UnmapBuffer Error: "<<std::endl;
+			__builtin_trap();
+	}
 }
 void CudaInterface::getPointer(void **ptr, size_t *size)
 {
 	cudaError_t e = cudaGraphicsResourceGetMappedPointer(ptr, size, *resource);
 	if (e != cudaSuccess)
+	{
 		std::cout<<"Get Pointer Buffer Error: "<<std::endl;
+			__builtin_trap();
+	}
 }
 
 
