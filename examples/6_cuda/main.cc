@@ -108,6 +108,7 @@ int main(void)
 
 	void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t);
 	CudaResource CR(&vb);
+	CR.Map();
 
 	Renderer renderer;
 	while (!glfwWindowShouldClose(window))
@@ -119,11 +120,9 @@ int main(void)
 
 
 
-		CR.Map();
 		device_set_dynamic_position(CR.getStream(), reinterpret_cast<float*>(CR.getPointer()), t);
 		CR.syncStream();
 		t = 1;
-		CR.Unmap();
 
 
 
@@ -139,6 +138,7 @@ int main(void)
 		std::clock_t t2 = std::clock();
                 std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
 	}
+	CR.Unmap();
 	
 } // detele everything before OpenGL terminate	
 

@@ -16,7 +16,8 @@ CudaResource::CudaResource(IndexBuffer *ib)
 }
 CudaResource::~CudaResource()
 {
-	
+	Unmap();
+	Unregister();
 }
 inline void CudaResource::Register(unsigned int ID)
 {
