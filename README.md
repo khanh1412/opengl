@@ -1,6 +1,6 @@
-# opengl
+# opengl and cuda
 
-cross platform opengl
+cross platform opengl with cuda supports.
 
 This repository holds the code of OpenGL API abstraction with CUDA integration written in C++
 
@@ -20,10 +20,10 @@ https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__
 
 # Tested
 
-- Nvidia GPU + Windows 10
+- Nvidia GPU + Windows 10 : stopped Windows supports.
 
-- Nvidia GPU + Fedora 29
+- Nvidia GPU + Fedora 29 : works
 
-- AMD GPU + Fedora 29
+- AMD GPU + Fedora 29 : does not work with CUDA
 
-- Intel GPU + Fedora 29 : does not work, version problem!
+- Intel GPU + Fedora 29 : does not work, GLSL version problem!
