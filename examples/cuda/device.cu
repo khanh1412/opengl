@@ -1,5 +1,5 @@
 #include<cstdio>
-__global__ void set_dynamic_position(float t, float *arr)
+__global__ void set_dynamic_position(float *arr, float t)
 {
 	int threadID = threadIdx.x;
 	int blockID = blockIdx.x;
@@ -10,12 +10,14 @@ __global__ void set_dynamic_position(float t, float *arr)
 	{
 		arr[i] = arr[i] * t;
 	}
+	if (threadID == 0)
+		std::printf("%f\n", arr[i]);
 }
 
-void device_set_dynamic_position(float t, float *d_arr)
+void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t)
 {
 	dim3 blocks_per_grid(4, 1, 1);
 	dim3 threads_per_block(5, 1, 1);
 
-	set_dynamic_position<<<blocks_per_grid, threads_per_block>>>(t, d_arr);
+	set_dynamic_position<<<blocks_per_grid, threads_per_block, 0, stream>>>(d_arr, t);
 }

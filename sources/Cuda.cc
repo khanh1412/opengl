@@ -1,99 +1,99 @@
 #include"Cuda.h"
-#include<iostream>
-CudaInterface::CudaInterface()
-	: count(0), map(0)
-{}
-CudaInterface::~CudaInterface()
+
+CudaResourceArray::CudaResourceArray()
 {
-	Unmap();
-	Unregister();
+	cudaStreamCreate(&stream);
+}
+CudaResourceArray::~CudaResourceArray()
+{
+	popAll();
+	cudaStreamDestroy(stream);
 }
 
-void CudaInterface::RegisterBufferDefault(VertexBuffer *vb)
+void CudaResourceArray::pushBuffer(unsigned int ID, void *Buffer)
 {
-	if (count == 0)
-	{
-		cudaError_t e = cudaGraphicsGLRegisterBuffer(&resource, vb->getID(), cudaGraphicsRegisterFlagsNone);
-		if (e == cudaSuccess)
-			count++;
-		else
-		{
-			std::cout<<"RegisterBuffer Error: "<<vb->getID()<<std::endl;
-			__builtin_trap();
-		}
-	}
-}
-void CudaInterface::RegisterBufferDefault(IndexBuffer *ib)
-{
-	if (count = 0)
-	{
-		cudaError_t e = cudaGraphicsGLRegisterBuffer(&resource, ib->getID(), cudaGraphicsRegisterFlagsNone);
-		if (e == cudaSuccess)
-			count++;
-		else
-		{
-			std::cout<<"RegisterBuffer Error: "<<ib->getID()<<std::endl;
-			__builtin_trap();
+	CudaResource* element = new CudaResource();
 
-		}
-	}
-}
-void CudaInterface::Unregister()
-{
-	if (count == 1)
-	{
-		cudaError_t e = cudaGraphicsUnregisterResource(resource);
-		if (e == cudaSuccess)
-			count--;
-		else
-		{
-			std::cout<<"UnregisterBuffer Error: "<<std::endl;
-			__builtin_trap();
-		}
-	}
+	if (cudaSuccess != cudaGraphicsGLRegisterBuffer(&(element->resource), ID, cudaGraphicsRegisterFlagsNone))
+		__builtin_trap();
+	if (cudaSuccess != cudaGraphicsMapResources(1, &(element->resource), stream))
+		__builtin_trap();
+	cudaGraphicsResourceSetMapFlags(element->resource, cudaGraphicsMapFlagsNone);
+	cudaGraphicsResourceGetMappedPointer(&(element->d_ptr), &(element->size), element->resource);
+
+	element->Buffer = Buffer;
+	elements.push_back(element);
 
 }
 
-void CudaInterface::Map()
+void CudaResourceArray::pushBuffer(VertexBuffer *vb)
 {
-	if (map==0)
+	pushBuffer(vb->getID(), reinterpret_cast<void*>(vb));
+}
+
+
+void CudaResourceArray::pushBuffer(IndexBuffer *ib)
+{
+	pushBuffer(ib->getID(), reinterpret_cast<void*>(ib));
+}
+
+void CudaResourceArray::popBuffer(std::vector<CudaResource*>::iterator it)
+{
+	CudaResource* element = (*it);
+
+	cudaGraphicsUnmapResources(1, &(element->resource), stream);
+	cudaGraphicsUnregisterResource(element->resource);
+	
+	elements.erase(it);
+}
+void CudaResourceArray::popAll()
+{
+	while (not elements.empty())
 	{
-		cudaError_t e = cudaGraphicsMapResources(count, &resource);
-		if (e == cudaSuccess)
-			map++;
-		else
-		{
-			std::cout<<"MapBuffer Error: "<<std::endl;
-			__builtin_trap();
-		}
+		auto it = elements.end();
+		it--;
+		popBuffer(it);
 	}
 }
-void CudaInterface::Unmap()
+std::vector<CudaResource*>::iterator CudaResourceArray::findElement(void *Buffer)
 {
-	if (map==1)
-	{
-		cudaError_t e = cudaGraphicsUnmapResources(count, &resource);
-		if (e == cudaSuccess)
-			map--;
-		else
-		{
-			std::cout<<"UnmapBuffer Error: "<<std::endl;
-			__builtin_trap();
-		}
-		map--;
-	}
+	std::vector<CudaResource*>::iterator it;
+	for (it = elements.begin(); it != elements.end(); it++)
+		if (((*it)->Buffer) == Buffer)
+			break;
+	return it;
 }
-void CudaInterface::getPointer(void **ptr, size_t *size)
+
+void CudaResourceArray::popBuffer(VertexBuffer *vb)
 {
-	if (map==1)
-	{
-		cudaError_t e = cudaGraphicsResourceGetMappedPointer(ptr, size, resource);
-		if (e != cudaSuccess)
-		{
-			std::cout<<"Get Pointer Buffer Error: "<<std::endl;
-			__builtin_trap();
-		}
-	}
+	auto it = findElement(reinterpret_cast<void*>(vb));
+	popBuffer(it);
 }
+void CudaResourceArray::popBuffer(IndexBuffer *ib)
+{
+	auto it = findElement(reinterpret_cast<void*>(ib));
+	popBuffer(it);
+}
+void *CudaResourceArray::getPointer(VertexBuffer *vb)
+{
+	auto it = findElement(reinterpret_cast<void*>(vb));
+	return (*it)->d_ptr;
+}
+void *CudaResourceArray::getPointer(IndexBuffer *ib)
+{
+	auto it = findElement(reinterpret_cast<void*>(ib));
+	return (*it)->d_ptr;
+}
+size_t CudaResourceArray::getSize(VertexBuffer *vb)
+{
+	auto it = findElement(reinterpret_cast<void*>(vb));
+	return (*it)->size;
+}
+size_t CudaResourceArray::getSize(IndexBuffer *ib)
+{
+	auto it = findElement(reinterpret_cast<void*>(ib));
+	return (*it)->size;
+}
+
 
 

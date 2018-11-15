@@ -102,15 +102,37 @@ int main(void)
 	glm::mat4 Model(1.0f);
 
 	glm::mat4 MVP = Proj * View * Model;
+	vb.setData((void*)&positions[0], 20*sizeof(float));
+
+
+
+
+
 #ifdef CUDA
-	void device_set_dynamic_position(float t, float *d_arr);
-	CudaInterface CI;
-	CI.RegisterBufferDefault(&vb);
-	std::cout<<"registered buffer vb"<<std::endl;
+	void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t);
+	CudaResourceArray CRA;
+	CRA.pushBuffer(&vb);
+	float *d_arr = reinterpret_cast<float*>(CRA.getPointer(&vb));
+	size_t size = CRA.getSize(&vb);
+
+	float *arr = new float[20];
+	CRA.syncStream();
+	cudaMemcpyAsync(arr, d_arr, size, cudaMemcpyDeviceToHost, CRA.getStream());
+	CRA.syncStream();
+
+	for (int i=0; i<20; i++) std::cout<<arr[i]; std::cout<<std::endl;
+
+
+
+
+
+
+
+
+
 #endif
 	while (!glfwWindowShouldClose(window))
 	{
-		std::clock_t t1 = std::clock();
 		/* render here */
 		renderer.Clear();
 
@@ -126,19 +148,15 @@ int main(void)
 #ifndef CUDA
 		vb.setData((void*)&dynamic_positions[0], 20*sizeof(float));
 #else
-		CI.Map();
-		float *d_arr; size_t size;
-		CI.getPointer((void**)&d_arr, &size);
-		//
-		char *arr = new char[size];
-		cudaMemcpy(arr, d_arr, size, cudaMemcpyDeviceToHost);
-		for (int i=0; i<20; i++)
-			std::cout<<reinterpret_cast<float*>(arr)[i]<<" ";
-		//
-		//device_set_dynamic_position(t, d_arr);
-		cudaMemcpy(d_arr, dynamic_positions, size, cudaMemcpyHostToDevice);
-		CI.Unmap();
+		CRA.syncStream();
+			device_set_dynamic_position(CRA.getStream(), d_arr, t);
+		CRA.syncStream();
 #endif
+
+
+
+
+
 		shader.Bind();
 		shader.SetUniformMat4f("u_MVP", MVP);
 
@@ -151,12 +169,7 @@ int main(void)
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		glfwSetKeyCallback(window, key_callback);
 	
-		std::clock_t t2 = std::clock();
-		//std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
 	}
-#ifdef CUDA
-	CI.Unregister();
-#endif
 	
 } // detele everything before OpenGL terminate	
 
@@ -170,20 +183,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		if (key == GLFW_KEY_RIGHT)
 		{
-			std::cout<<"GLFW_KEY_RIGHT"<<std::endl;
 		}
 		if (key == GLFW_KEY_LEFT) 
 		{
-			std::cout<<"GLFW_KEY_LEFT"<<std::endl;
 		}
 		if (key == GLFW_KEY_UP) 
 		{
-			std::cout<<"GLFW_KEY_UP"<<std::endl;
 			t+= 0.1*t;
 		}
 		if (key == GLFW_KEY_DOWN) 
 		{
-			std::cout<<"GLFW_KEY_DOWN"<<std::endl;
 			t-= 0.1*t;
 		}
 	}

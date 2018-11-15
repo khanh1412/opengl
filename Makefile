@@ -3,7 +3,7 @@ CXX_FLAGS=-std=c++17 -I./include -I./include/vendor -g -I/usr/include/cuda
 LIB_FLAGS= -lGL -lGLEW -lglfw -lcudart
 
 NVCC=nvcc
-CUDA_FLAGS= -ccbin cuda-g++ -I./include -I./include/vendor -I/usr/include/cuda -DCUDA
+CUDA_FLAGS= -ccbin cuda-g++ -I./include -I./include/vendor -I/usr/include/cuda -DCUDA --default-stream per-thread
 
 
 
@@ -20,13 +20,13 @@ lib: clean
 	$(CC) $(CXX_FLAGS) -c -fPIC -o objects/Cuda.o sources/Cuda.cc -I/usr/include/cuda
 	$(CC) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 	rm -rf objects
-cuda: lib
+cuda: libRenderer.so
 	$(CC) $(CXX_FLAGS) -c -fPIC -o examples/cuda/main.o examples/cuda/main.cc -DCUDA
 	$(NVCC) $(CUDA_FLAGS) -dc -o examples/cuda/device.o examples/cuda/device.cu
 	$(NVCC) $(CUDA_FLAGS) -o run examples/cuda/main.o examples/cuda/device.o ./libRenderer.so $(LIB_FLAGS) -lcudart
 	rm -f examples/cuda/*.o
-host:
-	$(CC) $(CXX_FLAGS) -o run main.cc ./libRenderer.so $(LIB_FLAGS)
+host: libRenderer.so
+	$(CC) $(CXX_FLAGS) -o run examples/cuda/main.cc ./libRenderer.so $(LIB_FLAGS)
 
 dynamic:
 	$(CC) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
