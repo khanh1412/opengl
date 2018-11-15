@@ -100,13 +100,16 @@ int main(void)
 	glm::mat4 Model(1.0f);
 
 	glm::mat4 MVP = Proj * View * Model;
+	shader.Bind();
+	shader.SetUniformMat4f("u_MVP", MVP);
+	
+	float FPS = 0;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		std::clock_t t1 = std::clock();
 		/* render here */
 		renderer.Clear();
-
-
 
 
 		vb.Bind();
@@ -117,20 +120,6 @@ int main(void)
 				dynamic_positions[i] = positions[i];
 
 		vb.setData((void*)&dynamic_positions[0], 20*sizeof(float));
-		shader.Bind();
-		shader.SetUniformMat4f("u_MVP", MVP);
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 		renderer.Draw(va, ib, shader);
@@ -142,7 +131,10 @@ int main(void)
 		glfwSetKeyCallback(window, key_callback);
 	
 		std::clock_t t2 = std::clock();
-		std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
+
+		FPS = 0.99*FPS + 0.01*static_cast<float>(CLOCKS_PER_SEC)/(t2-t1);
+		std::cout<<"FPS = "<<FPS<<std::endl;
+		
 	}
 	
 } // detele everything before OpenGL terminate	
@@ -157,20 +149,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		if (key == GLFW_KEY_RIGHT)
 		{
-			std::cout<<"GLFW_KEY_RIGHT"<<std::endl;
 		}
 		if (key == GLFW_KEY_LEFT) 
 		{
-			std::cout<<"GLFW_KEY_LEFT"<<std::endl;
 		}
 		if (key == GLFW_KEY_UP) 
 		{
-			std::cout<<"GLFW_KEY_UP"<<std::endl;
 			t+= 0.1*t;
 		}
 		if (key == GLFW_KEY_DOWN) 
 		{
-			std::cout<<"GLFW_KEY_DOWN"<<std::endl;
 			t-= 0.1*t;
 		}
 	}

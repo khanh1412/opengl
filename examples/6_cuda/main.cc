@@ -111,6 +111,7 @@ int main(void)
 	CR.Map();
 
 	Renderer renderer;
+	float FPS=0;
 	while (!glfwWindowShouldClose(window))
 	{
 		std::clock_t t1 = std::clock();
@@ -136,7 +137,8 @@ int main(void)
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		glfwSetKeyCallback(window, key_callback);
 		std::clock_t t2 = std::clock();
-                std::cout<<"FPS = "<<static_cast<float>(CLOCKS_PER_SEC)/(t2-t1)<<std::endl;
+                FPS = 0.99*FPS + 0.01*static_cast<float>(CLOCKS_PER_SEC)/(t2-t1);
+		std::cout<<"FPS = "<<FPS<<std::endl;
 	}
 	CR.Unmap();
 	
