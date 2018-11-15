@@ -27,10 +27,10 @@ https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__
 
 # Tested
 
-- Nvidia GPU + Windows 10 : stopped Windows supports.
+- Nvidia GPU + Windows 10 : still works, but I have stopped Windows supports.
 
 - Nvidia GPU + Fedora 29 : works
 
-- AMD GPU + Fedora 29 : does not work with CUDA
+- AMD GPU + Fedora 29 : works without CUDA
 
 - Intel GPU + Fedora 29 : does not work, GLSL version problem!
