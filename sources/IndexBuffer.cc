@@ -25,6 +25,7 @@ IndexBuffer::~IndexBuffer()
 }
 void IndexBuffer::setData(const unsigned int *data, unsigned int count)
 {
+	if (not m_Dynamic) return;
 	if (count > m_Count)
 	{
 		std::cout<<"Set a larger data than buffer size!"<<std::endl;

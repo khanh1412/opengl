@@ -21,6 +21,7 @@ VertexBuffer::~VertexBuffer()
 }
 void VertexBuffer::setData(const void *data, unsigned int size)
 {
+	if (not m_Dynamic) return;
 	if (size > m_Size)
 	{
 		std::cout<<"Set a larger data than buffer size!"<<std::endl;
