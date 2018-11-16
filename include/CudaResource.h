@@ -2,7 +2,7 @@
 #define _CUDA_RESOURCE_H_
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
-#include"NormBuffer.h"
+#include"CudaBuffer.h"
 #include<cuda_runtime_api.h>
 #include<cuda_gl_interop.h>
 class CudaResource
@@ -13,7 +13,7 @@ class CudaResource
 		cudaGraphicsResource_t resource;
 	        void *d_ptr;
         	size_t size;
-		bool isNormBuffer;
+		bool isCudaBuffer;
 
 
 		void Register(unsigned int ID);
@@ -22,7 +22,7 @@ class CudaResource
 	public:
 		CudaResource(VertexBuffer *vb);
 		CudaResource(IndexBuffer *ib);
-		CudaResource(NormBuffer *nb);
+		CudaResource(CudaBuffer *nb);
 		~CudaResource();
 		
 		void Map();

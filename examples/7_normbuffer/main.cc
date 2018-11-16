@@ -67,8 +67,13 @@ int main(void)
 	};
 	unsigned int indices[] = 
 	{
-		0, 1, 2,
-		2, 3, 0
+		0, 1, 2, //top left triangle
+		2, 3, 0  //bottom right triangle
+	};
+	float norms[] =
+	{
+		0, 0, 1, //top left triangle
+		0, 0,-1  //bottom right triangle
 	};
 
 
@@ -80,7 +85,9 @@ int main(void)
 		layout.Push_float(2);//2 floats of texture coordinates
 		va.AddBuffer(vb, layout);
 
-	IndexBuffer ib(indices, 6);
+	IndexBuffer ib(6);
+	CudaBuffer all_ib(&indices[0], 6*sizeof(unsigned int));
+	CudaBuffer nb(&norms[0], 6);
 
 
 
@@ -106,9 +113,26 @@ int main(void)
 
 
 
-	void device_set_dynamic_position(cudaStream_t stream, float *d_arr, float t);
-	CudaResource CR(&vb);
-	CR.Map();
+	void device_set_dynamic_positions(cudaStream_t stream, float *d_arr, float t);
+	void device_set_dynamic_indices(cudaStream_t stream, unsigned int *d_all_ib, unsigned int *d_ib);
+	CudaResource VB(&vb);
+	CudaResource ALL_IB(&all_ib);
+	CudaResource IB(&ib);
+	CudaResource NB(&nb);
+	VB.Map();
+	ALL_IB.Map();
+	IB.Map();
+	NB.Map();
+
+	std::cout<<"vb size = "		<<VB.getSize()		<<std::endl;
+	std::cout<<"all_ib size = "	<<ALL_IB.getSize()	<<std::endl;
+	std::cout<<"ib size = "		<<IB.getSize()		<<std::endl;
+	std::cout<<"nb size = "		<<NB.getSize()		<<std::endl;
+
+
+
+
+//	__builtin_trap();
 
 	Renderer renderer;
 	float FPS=0;
@@ -121,8 +145,14 @@ int main(void)
 
 
 
-		device_set_dynamic_position(CR.getStream(), reinterpret_cast<float*>(CR.getPointer()), t);
-		CR.syncStream();
+		device_set_dynamic_positions(VB.getStream(), reinterpret_cast<float*>(VB.getPointer()), t);
+		device_set_dynamic_indices(NB.getStream(),
+				reinterpret_cast<unsigned int*>(ALL_IB.getPointer()),
+				reinterpret_cast<unsigned int*>(IB.getPointer()));
+		VB.syncStream();
+		ALL_IB.syncStream();
+		IB.syncStream();
+		NB.syncStream();
 		t = 1;
 
 
@@ -139,8 +169,10 @@ int main(void)
 		std::clock_t t2 = std::clock();
                 FPS = 0.99*FPS + 0.01*static_cast<float>(CLOCKS_PER_SEC)/(t2-t1);
 		std::cout<<"FPS = "<<FPS<<std::endl;
+		//__builtin_trap();
 	}
-	CR.Unmap();
+	VB.Unmap();
+	NB.Unmap();
 	
 } // detele everything before OpenGL terminate	
 
