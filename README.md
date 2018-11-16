@@ -25,9 +25,9 @@ https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__
 # Features
 
 
-- `OpenGL`		: VertexArray, VertexBuffer, IndexBuffer, Shader, Texture
+- `OpenGL`		: VertexArray, VertexBuffer, IndexBuffer, Shader, Texture.
 
-- `CUDA GLBuffer`	: GLBuffer can be read and written by Cuda
+- `CUDA GLBuffer`	: GLBuffer can be read and written by Cuda.
 
 - `CUDA Buffer`		: Create CUDA buffer to do computation later.
 
