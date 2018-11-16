@@ -21,7 +21,6 @@ objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaResource.o sources/CudaResource.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaBuffer.o sources/CudaBuffer.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
 
 
 lib: objects
@@ -43,6 +42,8 @@ dynamic: lib
 
 world: lib
 	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/4_world.cc ./libRenderer.so $(LIB_FLAGS)
+depth_test: lib
+	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/8_world_with_depth_test.cc ./libRenderer.so $(LIB_FLAGS)
 
 3d: lib
 	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/3_3d.cc ./libRenderer.so $(LIB_FLAGS)
