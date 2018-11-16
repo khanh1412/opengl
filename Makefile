@@ -21,6 +21,7 @@ objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaResource.o sources/CudaResource.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaBuffer.o sources/CudaBuffer.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
 
 
 lib: objects
