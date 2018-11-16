@@ -2,9 +2,11 @@
 #define _CUDA_RESOURCE_H_
 #include"VertexBuffer.h"
 #include"IndexBuffer.h"
+#include"Texture.h"
 #include"CudaBuffer.h"
 #include<cuda_runtime_api.h>
 #include<cuda_gl_interop.h>
+enum ResourceType {OPENGL_BUFFER, CUDA_BUFFER, IMAGE};
 class CudaResource
 {
 	private:
@@ -13,7 +15,7 @@ class CudaResource
 		cudaGraphicsResource_t resource;
 	        void *d_ptr;
         	size_t size;
-		bool isCudaBuffer;
+		ResourceType type;
 
 
 		void Register(unsigned int ID);
@@ -23,6 +25,7 @@ class CudaResource
 		CudaResource(VertexBuffer *vb);
 		CudaResource(IndexBuffer *ib);
 		CudaResource(CudaBuffer *nb);
+		CudaResource(Texture *t);
 		~CudaResource();
 		
 		void Map();

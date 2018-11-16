@@ -17,7 +17,9 @@ class Texture
 		void Bind(unsigned int slot=0) const;
 		void Unbind(unsigned int slot=0) const;
 
-		inline int GetWidth() const { return m_Width;}
-		inline int GetHeight() const { return m_Height;}
+		inline int getWidth() const { return m_Width;}
+		inline int getHeight() const { return m_Height;}
+		inline int getBPP() const { return m_BPP;}
+		inline unsigned int getID() const {return m_RendererID;}
 };
 #endif
