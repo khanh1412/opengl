@@ -1,10 +1,10 @@
 CC		= g++
 CXX_FLAGS	= -std=c++17 -g
-INCLUDE		= -I./include -I./include/vendor -I/usr/include/cuda
+INCLUDE		= -I./include -I./include/vendor -I/usr/local/cuda/include
 LIB_FLAGS	= -lGL -lGLEW -lglfw -lcudart
 
-NVCC		= nvcc
-CUDA_CC		= cuda-g++ #gcc 7.x
+NVCC		= /usr/local/cuda/bin/nvcc
+CUDA_CC		= g++ #gcc 7.x
 CUDA_FLAGS	= -ccbin $(CUDA_CC) --default-stream per-thread
 
 
