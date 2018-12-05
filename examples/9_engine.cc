@@ -1,7 +1,5 @@
 #include"Engine.h"
-#include"Sphere.h"
 #include"Rectangle.h"
-#include"Cylinder.h"
 #include<iostream>
 #include<cmath>
 int main()

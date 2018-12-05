@@ -23,7 +23,6 @@ objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Rectangle.o sources/Rectangle.cc
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o
 
 
 lib: objects
