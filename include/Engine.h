@@ -1,61 +1,75 @@
 #ifndef _ENGINE_H_
 #define _ENGINE_H_
 
-#include<GL/glew.h>
-#include<GLFW/glfw3.h>
+#include"GL/glew.h"
+#include"GLFW/glfw3.h"
 
 #include"Renderer.h"
 #include"VertexBuffer.h"
-#include"VertexBufferLayout.h"
 #include"IndexBuffer.h"
 #include"VertexArray.h"
 #include"Shader.h"
+#include"VertexBufferLayout.h"
 #include"Texture.h"
-#include"CudaResource.h"
-#include"CudaBuffer.h"
 
-#include"glm/glm.hpp"
-#include"glm/gtc/matrix_transform.hpp"
+#include"glm/ext.hpp"
+
+
+#include<string>
 
 class Object
 {
-	private:
-		cudaStream_t stream;
-
-		float *vertices;
-		int hm_vertices;
-		unsigned int *triangles;
-		int hm_triangles;
-
-
-
+	protected:
 		VertexArray *va;
 		VertexBuffer *vb;
-		VertexBufferLayout *l;
+		bool vb_dynamic;
+		VertexBufferLayout *layout;
 		IndexBuffer *ib;
+		bool ib_dynamic;
 		Shader *s;
 		Texture *t;
 
-	public: // Theses methods issue some CUDA kernels.
-		/* genVertices and genTriangles generate data in GPU
-		 * */
-		virtual void genVertices();
-		virtual void genTriangles();
+		float *positions;
+		unsigned int size;
+		unsigned int *indices;
+		unsigned int count;
 
-		/* genIndices generates visible triangles using 3 algorithms
-		 * 	1. Break triangles down
-		 * 	2. Draw from far to near
-		 * 	3. Norm vectors
-		 * */
-		virtual void genIndices(float x, float y, float z)=0;
-
-	private:
-		virtual Shader* genShader();
-		virtual Texture* genTexture();
+		glm::vec3 Shift;
+		glm::vec3 Rotate;
+		glm::vec3 Scale;
+		
+		//gen VertexBufferLayout
+		virtual void genLayout()=0;
+	public:
+		//gen positions and size
+		virtual void genPositions()=0;
+		//gen indices and count
+		virtual void genIndices(glm::vec3& cam)=0;
 
 	public:
-		Object();
+		Object(bool vb_dynamic, bool ib_dynamic);
 		~Object();
+		
+		VertexArray *getVertexArray();
+		IndexBuffer *getIndexBuffer(glm::vec3& cam);
+		Shader *getShader();
+		Texture *getTexture();
+
+		//gen Shader
+		void genShader(const std::string& path);
+		//gen Texture
+		void genTexture(const std::string& path);
+
+		void setShift(float x, float y, float z);
+		void setRotate(float x, float y, float z);
+		void setScale(float x, float y, float z);
+		void shift(float x, float y, float z);
+		void rotate(float x, float y, float z);
+		void scale(float x, float y, float z);
+		glm::vec3& getShift();
+		glm::vec3& getRotate();
+		glm::vec3& getScale();
+
 };
 class Engine
 {

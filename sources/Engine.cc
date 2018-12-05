@@ -85,6 +85,25 @@ void Engine::setPov(float a)
 
 void Engine::draw(Object *obj)
 {
+	auto va		= obj->getVertexArray();	va->Bind();
+	auto ib		= obj->getIndexBuffer(cam);	ib->Bind();
+	auto shader	= obj->getShader();		shader->Bind();
+	auto texture	= obj->getTexture();		texture->Bind();
+
+	glm::mat4 Proj, View, Model(1.0f);
+	Proj = glm::perspective(pov, static_cast<float>(Width)/static_cast<float>(Height), 0.0f, 1000.0f);
+	View = glm::lookAt(cam, center, up);
+	Model = glm::translate(Model, obj->getShift());
+	Model = glm::rotate(Model, obj->getRotate()[0], glm::vec3(1.0f, 0.0f, 0.0f));
+	Model = glm::rotate(Model, obj->getRotate()[1], glm::vec3(0.0f, 1.0f, 0.0f));
+	Model = glm::rotate(Model, obj->getRotate()[2], glm::vec3(0.0f, 0.0f, 1.0f));
+	Model = glm::scale(Model, obj->getScale());
+
+	glm::mat4 MVP = Proj * View * Model;
+
+	shader->SetUniformMat4f("u_MVP", MVP);
+
+	renderer.Draw(*va, *ib, *shader);
 }
 void Engine::draw(std::vector<Object*> *objs)
 {

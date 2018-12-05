@@ -21,32 +21,40 @@ objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaResource.o sources/CudaResource.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/CudaBuffer.o sources/CudaBuffer.cc
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Engine.o sources/Engine.cc
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Object.o sources/Object.cc
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Rectangle.o sources/Rectangle.cc
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o
 
 
 lib: objects
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libEngine.so objects/*.o
+
+	rm -rf objects
+
+main: lib
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run ./main.cc ./libEngine.so ./libEngine.so $(LIB_FLAGS)
 
 
 normbuffer: lib
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o examples/7_normbuffer/main.o examples/7_normbuffer/main.cc
 	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -dc -o examples/7_normbuffer/device.o examples/7_normbuffer/device.cu
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/7_normbuffer/*.o ./libRenderer.so $(LIB_FLAGS) -lcudart
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/7_normbuffer/*.o ./libEngine.so $(LIB_FLAGS) -lcudart
 	rm -f examples/7_normbuffer/*.o
 cuda: lib
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o examples/6_cuda/main.o examples/6_cuda/main.cc
 	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -dc -o examples/6_cuda/device.o examples/6_cuda/device.cu
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/6_cuda/*.o ./libRenderer.so $(LIB_FLAGS)
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/6_cuda/*.o ./libEngine.so $(LIB_FLAGS)
 	rm -f examples/6_cuda/*.o
 dynamic: lib
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/5_dynamic.cc ./libEngine.so $(LIB_FLAGS)
 
 world: lib
-	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/4_world.cc ./libRenderer.so $(LIB_FLAGS)
+	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/4_world.cc ./libEngine.so $(LIB_FLAGS)
 depth_test: lib
-	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/8_world_with_depth_test.cc ./libRenderer.so $(LIB_FLAGS)
+	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/8_world_with_depth_test.cc ./libEngine.so $(LIB_FLAGS)
 
 3d: lib
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/3_3d.cc ./libRenderer.so $(LIB_FLAGS)
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/3_3d.cc ./libEngine.so $(LIB_FLAGS)
 
 clean:
 	rm -rf objects
