@@ -31,8 +31,8 @@ lib: objects
 
 	rm -rf objects
 
-main: lib
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run ./main.cc ./libEngine.so ./libEngine.so $(LIB_FLAGS)
+engine: lib
+	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run ./examples/9_engine.cc ./libEngine.so ./libEngine.so $(LIB_FLAGS)
 
 
 normbuffer: lib
