@@ -1,12 +1,7 @@
 CC		= g++
 CXX_FLAGS	= -std=c++17 -g
 INCLUDE		= -I./include -I./include/vendor -I/usr/local/cuda/include
-LIB_FLAGS	= -lGL -lGLEW -lglfw -lcudart
-
-NVCC		= /usr/local/cuda/bin/nvcc
-CUDA_CC		= g++ #gcc 7.x
-CUDA_FLAGS	= -ccbin $(CUDA_CC) --default-stream per-thread
-
+LIB_FLAGS	= -lGL -lGLEW -lglfw
 
 
 objects: clean
@@ -21,20 +16,20 @@ objects: clean
 
 
 lib: objects
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so.so objects/*.o
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 
 	rm -rf objects
 
 dynamic: lib
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so.so $(LIB_FLAGS)
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
 
 world: lib
-	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/4_world.cc ./libRenderer.so.so $(LIB_FLAGS)
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/4_world.cc ./libRenderer.so $(LIB_FLAGS)
 depth_test: lib
-	$(NVCC) $(INCLUDE) $(CDUA_FLAGS) -o run examples/8_world_with_depth_test.cc ./libRenderer.so.so $(LIB_FLAGS)
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/8_world_with_depth_test.cc ./libRenderer.so $(LIB_FLAGS)
 
 3d: lib
-	$(NVCC) $(INCLUDE) $(CUDA_FLAGS) -o run examples/3_3d.cc ./libRenderer.so.so $(LIB_FLAGS)
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/3_3d.cc ./libRenderer.so $(LIB_FLAGS)
 
 clean:
 	rm -rf objects
