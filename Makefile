@@ -1,6 +1,6 @@
 CC		= g++
 CXX_FLAGS	= -std=c++17 -g
-INCLUDE		= -I./include -I./include/vendor -I/usr/include/cuda
+INCLUDE		= -I./include/GL -I./include/GL/vendor -I/usr/include/cuda
 LIB_FLAGS	= -lGL -lGLEW -lglfw -lcudart
 
 NVCC		= nvcc
