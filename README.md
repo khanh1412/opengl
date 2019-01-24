@@ -43,6 +43,3 @@ https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OPENGL.html#group__
 - AMD GPU + Fedora 29 : works without CUDA
 
 - Intel GPU + Fedora 29 : does not work, GLSL version problem!
-
-# Todo
-- Implement Engine::Draw, Object's methods and Write a sample code.
