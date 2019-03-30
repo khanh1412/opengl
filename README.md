@@ -1,4 +1,4 @@
-# opengl and cuda
+# Simple Renderer using OpenGL and CUDA
 
 cross platform opengl with cuda supports.
 
