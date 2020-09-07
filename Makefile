@@ -1,8 +1,11 @@
 CC		= g++
 CXX_FLAGS	= -std=c++17 -g
-INCLUDE		= -I./include -I./include/vendor
+INCLUDE		= -I./include -I./vendor/glm -I./vendor/stb_image
 LIB_FLAGS	= -lGL -lGLEW -lglfw
 
+lib: objects
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
+	rm -rf objects
 
 objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/Renderer.o sources/Renderer.cc
@@ -15,20 +18,16 @@ objects: clean
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -c -fPIC -o objects/stb_image.o sources/vendor/stb_image.cc
 
 
-lib: objects
-	$(CC) $(INCLUDE) $(CXX_FLAGS) -shared -o libRenderer.so objects/*.o
 
-	rm -rf objects
-
-dynamic: lib
+dynamic:
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/5_dynamic.cc ./libRenderer.so $(LIB_FLAGS)
 
-world: lib
+world:
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/4_world.cc ./libRenderer.so $(LIB_FLAGS)
-depth_test: lib
+depth_test:
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/8_world_with_depth_test.cc ./libRenderer.so $(LIB_FLAGS)
 
-3d: lib
+3d:
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/3_3d.cc ./libRenderer.so $(LIB_FLAGS)
 
 clean:
