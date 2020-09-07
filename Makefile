@@ -1,6 +1,6 @@
 CC		= g++
 CXX_FLAGS	= -std=c++17 -g
-INCLUDE		= -I./include -I./vendor/glm -I./vendor/stb_image
+INCLUDE		= -I./include -I./include/vendor/glm -I./include/vendor/stb_image
 LIB_FLAGS	= -lGL -lGLEW -lglfw
 
 lib: objects
@@ -29,6 +29,10 @@ depth_test:
 
 3d:
 	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/3_3d.cc ./libRenderer.so $(LIB_FLAGS)
+rec:
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/2_rectangle.cc ./libRenderer.so $(LIB_FLAGS)
+tri:
+	$(CC) $(INCLUDE) $(CXX_FLAGS) -o run examples/1_red_triangle.cc ./libRenderer.so $(LIB_FLAGS)
 
 clean:
 	rm -rf objects
